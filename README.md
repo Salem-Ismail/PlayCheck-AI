@@ -1,12 +1,14 @@
 # ⚽︎ PlayCheck AI
 
-## Overview
+## 📌 Overview
 
 PlayCheck AI is an AI-powered football rules assistant designed to help users quickly understand FIFA's Laws of the Game. It allows users to ask questions about match scenarios and receive clear, structured responses based on the official rulebook.
 
+Visuals and demo videos will be added at a later time.
+
 <br>
 
-## Features 🚀
+## 🚀 Features 
 
 - Uses AI-powered retrieval to find the most relevant FIFA law for a given query.
 
@@ -18,21 +20,21 @@ PlayCheck AI is an AI-powered football rules assistant designed to help users qu
 
 <br>
 
-## Tech Stack 🛠️
+## 🛠️ Tech Stack 
 
-Frontend: Node.js (HTML, Tailwind CSS, JavaScript)
+- Frontend: Node.js (HTML, Tailwind CSS, JavaScript)
 
-Backend: Python (Flask)
+- Backend: Python (Flask)
 
-AI Model: OpenAI API (GPT-4o-mini)
+- AI Model: OpenAI API (GPT-4o-mini)
 
-Data Processing: Custom retrieval algorithm using FIFA Laws of The Game (JSON)
+- Data Processing: Custom retrieval algorithm using FIFA Laws of The Game (JSON)
 
-Hosting & Deployment: Flask (Local Testing)
+- Hosting & Deployment: Flask (Local Testing)
 
 <br>
 
-## Future Improvements 🌟
+## 🌟 Future Improvements 
 
 - Implement TF-IDF ranking for better retrieval accuracy.
 
