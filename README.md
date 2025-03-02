@@ -4,7 +4,9 @@
 
 PlayCheck AI is an AI-powered football rules assistant designed to help users quickly understand FIFA's Laws of the Game. It allows users to ask questions about match scenarios and receive clear, structured responses based on the official rulebook.
 
-Visuals and demo videos will be added at a later time.
+Home Page  |  Chat Demo
+:-------------------------:|:-------------------------:
+<img src="p-ss.png" alt="ss" style="width: 1000px; height: auto;" />   |  <img src="p-demo.gif" alt="gif" style="width: 1000px; height: auto;" />
 
 <br>
 
