@@ -24,7 +24,7 @@ Home Page  |  Chat Demo
 
 ## 🛠️ Tech Stack 
 
-- Frontend: Node.js (HTML, Tailwind CSS, JavaScript)
+- Frontend: HTML, Tailwind CSS, JavaScript
 
 - Backend: Python (Flask)
 
