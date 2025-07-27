@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayCheck AI - Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #292a2d;
+            color: #eaeaea;
+        }
+    </style>
+</head>
+<body class="text-white font-sans">
+    
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 w-full bg-[#212327] shadow-md z-50 border-b border-gray-700 flex justify-between items-center p-4">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl text-white">⚽︎</span>
+            <h1 class="text-2xl font-semibold">PlayCheck AI Chat</h1>
+        </div>
+        <a href="index.html" class="bg-white text-black px-4 py-2 text-base rounded-lg shadow-md hover:bg-gray-600 absolute top-3 right-4">Back to Home</a>
+    </nav>
+    
+    <!-- Chat Container -->
+    <section class="flex flex-col flex-grow mt-16 w-full max-w-5xl mx-auto">
+        <div class="flex-grow overflow-y-auto p-6 rounded-lg" id="chat-box">
+            <!-- Messages will be dynamically inserted here -->
+        </div>
+        
+        <!-- Pop-up Container -->
+        <div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div class="bg-white p-6 rounded-2xl shadow-lg max-w-lg w-full text-black">  <!-- Added 'text-black' -->        
+                <h2 class="text-lg font-bold mb-2">💡 Get the Best Answers from PlayCheck AI!</h2>
+                <p class="text-sm mb-4">
+                    For accurate results, describe your situation with context before asking. Instead of short, vague questions, try real-game scenarios using <b>referee terminology</b>.
+                </p>
+                <ul class="text-sm list-disc pl-5 mb-4">
+                    <li><b>✅ Better:</b> "A defender deliberately handles the ball in the penalty area with no attempt to play the ball. Does the referee award a penalty and issue a red card for denying a goal?"</li>
+                    <li><b>🟡 Okay:</b> "A player's hand touches the ball inside the penalty area. What is the referee’s decision?"</li>
+                    <li><b>❌ Less Effective:</b> "Handball in the penalty box?"</li>
+                </ul>
+                <p class="text-xs mb-4">🏆 Use terms from FIFA's Laws of the Game (e.g., "serious foul play," "reckless challenge," "offside infraction") to get the most accurate response.</p>
+                <div class="flex justify-end space-x-2">
+                    <button id="dismiss-popup" class="bg-black text-white px-4 py-2 rounded-lg text-sm">Got it!</button>
+                    <button id="never-show" class="text-gray-500 text-sm">Don't show again</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Field -->
+        <div class="p-4 border-t border-gray-700 flex items-center rounded-xl">
+            <input id="chat-input" type="text" class="flex-grow p-3 border rounded-full bg-[#404045] border-gray-700 focus:ring-0 focus:outline-none text-white" placeholder="Type a message...">
+           
+            <button id="send-btn" class="ml-4 bg-white text-black px-7 py-7 rounded-lg shadow-md hover:bg-gray-300 relative">
+                <span class="absolute inset-0 flex items-center justify-center text-5xl">⇧</span>
+            </button>
+            
+                 
+        </div>
+    </section>
+    
+    <script>
+        document.getElementById("send-btn").addEventListener("click", async function () {
+    const inputField = document.getElementById("chat-input");
+    const chatBox = document.getElementById("chat-box");
+
+    
+    if (inputField.value.trim() !== "") {
+        const userInput = inputField.value;
+
+        // Create user message bubble
+        const userMessageDiv = document.createElement("div");
+        userMessageDiv.classList.add("bg-[#3a3b3f]", "text-white", "p-3", "rounded-lg", "mb-2", "self-end", "max-w-md", "ml-auto");
+        userMessageDiv.innerText = userInput;
+        chatBox.appendChild(userMessageDiv);
+
+        // Scroll to latest message
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Clear input field
+        inputField.value = "";
+
+        try {
+            // Send message to Flask backend
+            console.log("Sending request to backend...");
+            const response = await fetch("http://127.0.0.1:5000/get_rule", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query: userInput })
+            });
+
+            console.log("Response status:", response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Response data:", data);
+
+            // Check if there's an AI response
+            if (data.response) {
+                const aiMessageDiv = document.createElement("div");
+                aiMessageDiv.classList.add("text-white", "p-3", "mb-2", "max-w-md", "self-start");
+                aiMessageDiv.innerText = data.response; // AI's response
+                chatBox.appendChild(aiMessageDiv);
+            } else if (data.error) {
+                const errorDiv = document.createElement("div");
+                errorDiv.classList.add("text-red-400", "p-3", "mb-2", "max-w-md", "self-start");
+                errorDiv.innerText = "Error: " + data.error;
+                chatBox.appendChild(errorDiv);
+            } else {
+                console.error("No response received from AI.");
+                const errorDiv = document.createElement("div");
+                errorDiv.classList.add("text-red-400", "p-3", "mb-2", "max-w-md", "self-start");
+                errorDiv.innerText = "No response received from AI.";
+                chatBox.appendChild(errorDiv);
+            }
+
+            // Scroll to latest message
+            chatBox.scrollTop = chatBox.scrollHeight;
+        } catch (error) {
+            console.error("Error communicating with backend:", error);
+            const errorDiv = document.createElement("div");
+            errorDiv.classList.add("text-red-400", "p-3", "mb-2", "max-w-md", "self-start");
+            errorDiv.innerText = "Connection error: " + error.message;
+            chatBox.appendChild(errorDiv);
+        }
+    }
+});
+
+    </script>
+    <script>
+        // Auto-refresh the page every 30 seconds to pick up changes
+        setTimeout(function() {
+            location.reload();
+        }, 30000);
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            const popup = document.getElementById("popup");
+            const dismissButton = document.getElementById("dismiss-popup");
+            const neverShowButton = document.getElementById("never-show");
+    
+            // Check if the user has dismissed the pop-up permanently
+            if (localStorage.getItem("hidePopup") === "true") {
+                popup.style.display = "none";
+            }
+    
+            // Dismiss pop-up when clicking "Got it!"
+            dismissButton.addEventListener("click", function () {
+                popup.style.display = "none";
+            });
+    
+            // Never show again
+            neverShowButton.addEventListener("click", function () {
+                localStorage.setItem("hidePopup", "true");
+                popup.style.display = "none";
+            });
+        });
+    </script>    
+</body>
+</html>
+
