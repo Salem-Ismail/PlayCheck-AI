@@ -46,4 +46,7 @@ logs/
 
 # Temporary files
 *.tmp
-*.temp 
+*.temp
+
+# Private documentation
+technical_details.txt 
