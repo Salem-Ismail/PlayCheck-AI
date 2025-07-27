@@ -5,167 +5,549 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlayCheck AI - Chat</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
         html {
             scroll-behavior: smooth;
         }
+        
         body {
-            display: flex;
-            flex-direction: column;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             height: 100vh;
-            background-color: #292a2d;
-            color: #eaeaea;
+            overflow: hidden;
+        }
+        
+        .chat-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .message-bubble {
+            animation: fadeInUp 0.3s ease-out;
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 18px 18px 4px 18px;
+        }
+        
+        .ai-message {
+            background: white;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px 18px 18px 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            line-height: 1.6;
+        }
+        
+        .ai-message br {
+            display: block;
+            content: "";
+            margin-top: 8px;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 18px 18px 18px 4px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 80px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .send-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .send-button:disabled {
+            opacity: 0.6;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .input-field {
+            background: white;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .confidence-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+        }
+        
+        .rule-reference {
+            background: #f3f4f6;
+            border-left: 3px solid #667eea;
+            padding: 8px 12px;
+            margin: 8px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .welcome-modal {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .welcome-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .start-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
         }
     </style>
 </head>
-<body class="text-white font-sans">
+<body class="text-gray-800">
     
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 w-full bg-[#212327] shadow-md z-50 border-b border-gray-700 flex justify-between items-center p-4">
-        <div class="flex items-center space-x-2">
-            <span class="text-2xl text-white">⚽︎</span>
-            <h1 class="text-2xl font-semibold">PlayCheck AI Chat</h1>
-        </div>
-        <a href="index.html" class="bg-white text-black px-4 py-2 text-base rounded-lg shadow-md hover:bg-gray-600 absolute top-3 right-4">Back to Home</a>
-    </nav>
-    
-    <!-- Chat Container -->
-    <section class="flex flex-col flex-grow mt-16 w-full max-w-5xl mx-auto">
-        <div class="flex-grow overflow-y-auto p-6 rounded-lg" id="chat-box">
-            <!-- Messages will be dynamically inserted here -->
-        </div>
-        
-        <!-- Pop-up Container -->
-        <div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div class="bg-white p-6 rounded-2xl shadow-lg max-w-lg w-full text-black">  <!-- Added 'text-black' -->        
-                <h2 class="text-lg font-bold mb-2">💡 Get the Best Answers from PlayCheck AI!</h2>
-                <p class="text-sm mb-4">
-                    For accurate results, describe your situation with context before asking. Instead of short, vague questions, try real-game scenarios using <b>referee terminology</b>.
-                </p>
-                <ul class="text-sm list-disc pl-5 mb-4">
-                    <li><b>✅ Better:</b> "A defender deliberately handles the ball in the penalty area with no attempt to play the ball. Does the referee award a penalty and issue a red card for denying a goal?"</li>
-                    <li><b>🟡 Okay:</b> "A player's hand touches the ball inside the penalty area. What is the referee’s decision?"</li>
-                    <li><b>❌ Less Effective:</b> "Handball in the penalty box?"</li>
-                </ul>
-                <p class="text-xs mb-4">🏆 Use terms from FIFA's Laws of the Game (e.g., "serious foul play," "reckless challenge," "offside infraction") to get the most accurate response.</p>
-                <div class="flex justify-end space-x-2">
-                    <button id="dismiss-popup" class="bg-black text-white px-4 py-2 rounded-lg text-sm">Got it!</button>
-                    <button id="never-show" class="text-gray-500 text-sm">Don't show again</button>
+    <nav class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-futbol text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-semibold text-gray-900">PlayCheck AI</h1>
+                    <p class="text-xs text-gray-500">Football Rules Assistant</p>
                 </div>
             </div>
+            <a href="index.html" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                <i class="fas fa-home mr-2"></i>Home
+            </a>
         </div>
-
-        <!-- Input Field -->
-        <div class="p-4 border-t border-gray-700 flex items-center rounded-xl">
-            <input id="chat-input" type="text" class="flex-grow p-3 border rounded-full bg-[#404045] border-gray-700 focus:ring-0 focus:outline-none text-white" placeholder="Type a message...">
-           
-            <button id="send-btn" class="ml-4 bg-white text-black px-7 py-7 rounded-lg shadow-md hover:bg-gray-300 relative">
-                <span class="absolute inset-0 flex items-center justify-center text-5xl">⇧</span>
-            </button>
-            
-                 
+    </nav>
+    
+    <!-- Welcome Modal -->
+    <div id="welcome-modal" class="fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div class="welcome-modal rounded-3xl shadow-2xl max-w-2xl w-full mx-4 p-6 max-h-[90vh] overflow-y-auto">
+            <div class="text-center">
+                <div class="welcome-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-3">Welcome to PlayCheck AI!</h2>
+                <p class="text-gray-600 mb-6 text-base">Your intelligent assistant for football rules and referee decisions</p>
+                
+                <!-- Feature Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                    <div class="feature-card">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
+                            <i class="fas fa-search text-blue-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Smart Search</h3>
+                        <p class="text-sm text-gray-600">Find relevant FIFA laws instantly</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
+                            <i class="fas fa-brain text-green-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">AI Analysis</h3>
+                        <p class="text-sm text-gray-600">Get intelligent rule interpretations</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
+                            <i class="fas fa-chart-line text-purple-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Confidence Scores</h3>
+                        <p class="text-sm text-gray-600">Know how certain the AI is</p>
+                    </div>
+                </div>
+                
+                <!-- Quick Tips -->
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-6">
+                    <h4 class="font-semibold text-blue-900 mb-2">💡 Pro Tip</h4>
+                    <p class="text-sm text-blue-800">Describe scenarios in detail for the most accurate answers. Use referee terminology for best results.</p>
+                </div>
+                
+                <button id="start-chat-btn" class="start-button text-white px-6 py-3 rounded-xl text-base font-semibold">
+                    <i class="fas fa-play mr-2"></i>Start Chatting
+                </button>
+            </div>
         </div>
-    </section>
+    </div>
+    
+    <!-- Main Chat Container (Hidden initially) -->
+    <div id="chat-section" class="pt-20 px-4 h-screen hidden">
+        <div class="max-w-4xl mx-auto h-full flex flex-col justify-center">
+            <div class="chat-container rounded-2xl shadow-2xl overflow-hidden flex flex-col" style="height: 85vh;">
+                
+                <!-- Chat Header -->
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-xl font-semibold">Chat with PlayCheck AI</h2>
+                            <p class="text-blue-100 text-sm">Ask about any football rule or scenario</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                                <span class="text-sm text-blue-100">Online</span>
+                            </div>
+                            <button id="help-btn" class="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-colors">
+                                <i class="fas fa-question text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat Messages -->
+                <div class="flex-1 overflow-y-auto p-4 bg-gray-50" id="chat-box">
+                    <!-- Messages will be added here -->
+                </div>
+                
+                <!-- Input Area -->
+                <div class="p-4 bg-white border-t border-gray-200">
+                    <div class="flex items-end space-x-3">
+                        <div class="flex-1">
+                            <textarea 
+                                id="chat-input" 
+                                class="input-field w-full p-3 rounded-xl resize-none focus:outline-none transition-all duration-300"
+                                placeholder="Describe a football scenario or ask about a rule..."
+                                rows="1"
+                                style="min-height: 48px; max-height: 100px;"
+                            ></textarea>
+                        </div>
+                        <button 
+                            id="send-btn" 
+                            class="send-button text-white p-3 rounded-xl shadow-lg disabled:cursor-not-allowed"
+                            disabled
+                        >
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                        <span>Press Enter to send</span>
+                        <span id="char-count">0 characters</span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <!-- Help Modal -->
+    <div id="help-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">How to Get the Best Answers</h3>
+                <button id="close-help" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded">
+                    <h4 class="font-medium text-green-800 mb-2">✅ Best Examples:</h4>
+                    <p class="text-sm text-green-700">"A defender deliberately handles the ball in the penalty area with no attempt to play the ball. Does the referee award a penalty and issue a red card for denying a goal?"</p>
+                </div>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                    <h4 class="font-medium text-yellow-800 mb-2">🟡 Good Examples:</h4>
+                    <p class="text-sm text-yellow-700">"A player's hand touches the ball inside the penalty area. What is the referee's decision?"</p>
+                </div>
+                <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded">
+                    <h4 class="font-medium text-red-800 mb-2">❌ Avoid:</h4>
+                    <p class="text-sm text-red-700">"Handball in the penalty box?" (too vague)</p>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button id="got-it-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                    Got it!
+                </button>
+            </div>
+        </div>
+    </div>
     
     <script>
-        document.getElementById("send-btn").addEventListener("click", async function () {
-    const inputField = document.getElementById("chat-input");
-    const chatBox = document.getElementById("chat-box");
-
-    
-    if (inputField.value.trim() !== "") {
-        const userInput = inputField.value;
-
-        // Create user message bubble
-        const userMessageDiv = document.createElement("div");
-        userMessageDiv.classList.add("bg-[#3a3b3f]", "text-white", "p-3", "rounded-lg", "mb-2", "self-end", "max-w-md", "ml-auto");
-        userMessageDiv.innerText = userInput;
-        chatBox.appendChild(userMessageDiv);
-
-        // Scroll to latest message
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        // Clear input field
-        inputField.value = "";
-
-        try {
-            // Send message to Flask backend
-            console.log("Sending request to backend...");
-            const response = await fetch("http://127.0.0.1:5000/get_rule", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ query: userInput })
-            });
-
-            console.log("Response status:", response.status);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            console.log("Response data:", data);
-
-            // Check if there's an AI response
-            if (data.response) {
-                const aiMessageDiv = document.createElement("div");
-                aiMessageDiv.classList.add("text-white", "p-3", "mb-2", "max-w-md", "self-start");
-                aiMessageDiv.innerText = data.response; // AI's response
-                chatBox.appendChild(aiMessageDiv);
-            } else if (data.error) {
-                const errorDiv = document.createElement("div");
-                errorDiv.classList.add("text-red-400", "p-3", "mb-2", "max-w-md", "self-start");
-                errorDiv.innerText = "Error: " + data.error;
-                chatBox.appendChild(errorDiv);
-            } else {
-                console.error("No response received from AI.");
-                const errorDiv = document.createElement("div");
-                errorDiv.classList.add("text-red-400", "p-3", "mb-2", "max-w-md", "self-start");
-                errorDiv.innerText = "No response received from AI.";
-                chatBox.appendChild(errorDiv);
-            }
-
-            // Scroll to latest message
-            chatBox.scrollTop = chatBox.scrollHeight;
-        } catch (error) {
-            console.error("Error communicating with backend:", error);
-            const errorDiv = document.createElement("div");
-            errorDiv.classList.add("text-red-400", "p-3", "mb-2", "max-w-md", "self-start");
-            errorDiv.innerText = "Connection error: " + error.message;
-            chatBox.appendChild(errorDiv);
-        }
-    }
-});
-
-    </script>
-    <script>
-        // Auto-refresh the page every 30 seconds to pick up changes
-        setTimeout(function() {
-            location.reload();
-        }, 30000);
+        // DOM Elements
+        const welcomeModal = document.getElementById('welcome-modal');
+        const chatSection = document.getElementById('chat-section');
+        const startChatBtn = document.getElementById('start-chat-btn');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        const chatBox = document.getElementById('chat-box');
+        const charCount = document.getElementById('char-count');
+        const helpBtn = document.getElementById('help-btn');
+        const helpModal = document.getElementById('help-modal');
+        const closeHelp = document.getElementById('close-help');
+        const gotItBtn = document.getElementById('got-it-btn');
         
-        document.addEventListener("DOMContentLoaded", function () {
-            const popup = document.getElementById("popup");
-            const dismissButton = document.getElementById("dismiss-popup");
-            const neverShowButton = document.getElementById("never-show");
-    
-            // Check if the user has dismissed the pop-up permanently
-            if (localStorage.getItem("hidePopup") === "true") {
-                popup.style.display = "none";
-            }
-    
-            // Dismiss pop-up when clicking "Got it!"
-            dismissButton.addEventListener("click", function () {
-                popup.style.display = "none";
-            });
-    
-            // Never show again
-            neverShowButton.addEventListener("click", function () {
-                localStorage.setItem("hidePopup", "true");
-                popup.style.display = "none";
-            });
+        // Start chat button
+        startChatBtn.addEventListener('click', () => {
+            welcomeModal.classList.add('hidden');
+            chatSection.classList.remove('hidden');
+            chatInput.focus();
         });
-    </script>    
+        
+        // Auto-resize textarea
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+            
+            // Update character count
+            const count = this.value.length;
+            charCount.textContent = `${count} characters`;
+            
+            // Enable/disable send button
+            sendBtn.disabled = count === 0;
+        });
+        
+        // Send message on Enter (not Shift+Enter)
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Send button click
+        sendBtn.addEventListener('click', sendMessage);
+        
+        // Help modal
+        helpBtn.addEventListener('click', () => helpModal.classList.remove('hidden'));
+        closeHelp.addEventListener('click', () => helpModal.classList.add('hidden'));
+        gotItBtn.addEventListener('click', () => helpModal.classList.add('hidden'));
+        
+        // Close modal on outside click
+        helpModal.addEventListener('click', (e) => {
+            if (e.target === helpModal) {
+                helpModal.classList.add('hidden');
+            }
+        });
+        
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            
+            // Clear input
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            charCount.textContent = '0 characters';
+            sendBtn.disabled = true;
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Send to backend
+            fetchResponse(message);
+        }
+        
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message-bubble mb-3 ${sender === 'user' ? 'flex justify-end' : 'flex justify-start'}`;
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = sender === 'user' ? 'user-message max-w-[80%] px-3 py-2' : 'ai-message max-w-[80%] px-3 py-2';
+            
+            // Format AI response with confidence scores and rule references
+            if (sender === 'ai') {
+                const formattedText = formatAIResponse(text);
+                bubbleDiv.innerHTML = formattedText;
+            } else {
+                bubbleDiv.textContent = text;
+            }
+            
+            messageDiv.appendChild(bubbleDiv);
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        
+        function formatAIResponse(text) {
+            let formatted = text;
+            
+            // Add confidence score if present
+            if (text.includes('Confidence:')) {
+                const confidenceMatch = text.match(/Confidence: (\d+)%/);
+                if (confidenceMatch) {
+                    const confidence = confidenceMatch[1];
+                    formatted = formatted.replace(
+                        /Confidence: \d+%/,
+                        `<span class="confidence-badge">${confidence}% confident</span>`
+                    );
+                }
+            }
+            
+            // Format rule references (simplified)
+            formatted = formatted.replace(
+                /Law (\d+): ([^.!?]+)/g,
+                '<div class="rule-reference"><strong>Law $1:</strong> $2</div>'
+            );
+            
+            // Add spacing and highlight important parts
+            formatted = formatted
+                // Add line breaks for better readability
+                .replace(/\. /g, '.<br><br>')
+                .replace(/! /g, '!<br><br>')
+                .replace(/\? /g, '?<br><br>')
+                
+                // Highlight AI's final conclusion (last sentence)
+                .replace(/([^.!?]+[.!?]?)$/g, function(match, lastSentence) {
+                    const trimmed = lastSentence.trim();
+                    // Only highlight if it's a substantial sentence (more than 20 characters) and not a law reference
+                    if (trimmed.length > 20 && !trimmed.includes('Law ') && !trimmed.includes('<div class="rule-reference">')) {
+                        return '<br><br><span class="font-bold text-gray-900">' + trimmed + '</span>';
+                    }
+                    return match;
+                })
+                
+                // Clean up multiple line breaks
+                .replace(/<br><br><br>/g, '<br><br>');
+            
+            return formatted;
+        }
+        
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message-bubble mb-3 flex justify-start typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            
+            typingDiv.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            
+            chatBox.appendChild(typingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        async function fetchResponse(message) {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/get_rule', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: message })
+                });
+                
+                hideTypingIndicator();
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.response) {
+                    addMessage(data.response, 'ai');
+                } else if (data.error) {
+                    addErrorMessage(data.error);
+                } else {
+                    addErrorMessage('No response received from AI.');
+                }
+                
+            } catch (error) {
+                hideTypingIndicator();
+                addErrorMessage(`Connection error: ${error.message}`);
+            }
+        }
+        
+        function addErrorMessage(error) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'message-bubble mb-3 flex justify-start';
+            errorDiv.innerHTML = `
+                <div class="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg max-w-[80%] text-sm">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    ${error}
+                </div>
+            `;
+            chatBox.appendChild(errorDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
 </body>
 </html>
 
