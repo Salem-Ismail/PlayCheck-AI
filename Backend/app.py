@@ -64,29 +64,39 @@ def get_rule():
             for law_dict, score in relevant_laws_with_scores
         ])
 
-        # Construct the AI prompt with multiple laws as context
+        # Enhanced AI prompt with structured format
         ai_prompt = f"""
-        You are PlayCheck AI, an expert football referee assistant trained on FIFA's Laws of the Game. 
-        Your job is to analyze match scenarios and provide clear, structured explanations.
+You are PlayCheck AI, an expert football referee assistant trained on FIFA's Laws of the Game. 
+Your job is to analyze match scenarios and provide clear, structured explanations.
 
-        **Below are some potentially relevant FIFA Laws:**
-        {law_context}
+**Below are some potentially relevant FIFA Laws:**
+{law_context}
 
-        Now, analyze the following user query and determine if any law applies:
+**ANALYZE THIS SCENARIO:** "{user_query}"
 
-        **User Query:** "{user_query}"
+**PROVIDE YOUR RESPONSE IN THIS EXACT STRUCTURED FORMAT:**
 
-        If a law applies, explain it concisely. If no law applies, say: "No specific FIFA Law covers this situation."
-        """
+**SUMMARY:** [Provide a short 1-2 sentence summary of the applicable law(s)]
+
+**SANCTIONS:** [List all applicable sanctions/cards - yellow cards, red cards, etc. Include multiple sanctions if multiple offenses occur]
+
+**RESTART:** [Specify the exact restart method - free kick, penalty kick, throw-in, etc.]
+
+**FINAL DECISION:** [Provide the clear final decision the referee should make]
+
+If no specific FIFA Law covers this situation, respond with: "No specific FIFA Law covers this situation."
+
+**IMPORTANT:** Be thorough - if multiple offenses occur, address each one. If multiple players are involved, specify sanctions for each.
+"""
 
         # Call OpenAI API
         print("Calling OpenAI API...")
         try:
             response = openai.ChatCompletion.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "user", "content": ai_prompt}],
-                temperature=0.3
-            )
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": ai_prompt}],
+            temperature=0.2
+        )
             print("OpenAI API call successful")
         except Exception as api_error:
             print(f"OpenAI API error: {api_error}")
