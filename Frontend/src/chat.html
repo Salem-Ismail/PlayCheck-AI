@@ -237,8 +237,8 @@
                         <h3 class="font-semibold text-gray-900 mb-2">Confidence Scores</h3>
                         <p class="text-sm text-gray-600">Know how certain the AI is</p>
                     </div>
-                </div>
-                
+        </div>
+        
                 <!-- Quick Tips -->
                 <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-6">
                     <h4 class="font-semibold text-blue-900 mb-2">💡 Pro Tip</h4>
@@ -272,10 +272,10 @@
                             <button id="help-btn" class="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-colors">
                                 <i class="fas fa-question text-sm"></i>
                             </button>
-                        </div>
-                    </div>
                 </div>
-                
+            </div>
+        </div>
+
                 <!-- Chat Messages -->
                 <div class="flex-1 overflow-y-auto p-4 bg-gray-50" id="chat-box">
                     <!-- Messages will be added here -->
@@ -299,7 +299,7 @@
                             disabled
                         >
                             <i class="fas fa-paper-plane"></i>
-                        </button>
+            </button>
                     </div>
                     <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
                         <span>Press Enter to send</span>
@@ -367,7 +367,7 @@
         chatInput.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-            
+
             // Update character count
             const count = this.value.length;
             charCount.textContent = `${count} characters`;
@@ -411,7 +411,7 @@
             chatInput.style.height = 'auto';
             charCount.textContent = '0 characters';
             sendBtn.disabled = true;
-            
+
             // Show typing indicator
             showTypingIndicator();
             
@@ -433,7 +433,7 @@
             } else {
                 bubbleDiv.textContent = text;
             }
-            
+
             messageDiv.appendChild(bubbleDiv);
             chatBox.appendChild(messageDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
@@ -454,28 +454,42 @@
                 }
             }
             
-            // Format rule references (simplified)
-            formatted = formatted.replace(
-                /Law (\d+): ([^.!?]+)/g,
-                '<div class="rule-reference"><strong>Law $1:</strong> $2</div>'
-            );
-            
-            // Add spacing and highlight important parts
+            // Format structured sections with specific color coding
             formatted = formatted
-                // Add line breaks for better readability
+                // Format the summary section (keep as normal text)
+                .replace(/\*\*SUMMARY:\*\* (.*?)(?=\*\*|$)/gs, function(match, summary) {
+                    return '<div class="mb-3"><strong>Summary:</strong> ' + summary.trim() + '</div>';
+                })
+                
+                // Format sanctions section (yellow)
+                .replace(/\*\*SANCTIONS:\*\* (.*?)(?=\*\*|$)/gs, function(match, sanctions) {
+                    return '<div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-r-lg mb-3">' + 
+                           '<div class="font-bold text-yellow-800 mb-1">Sanctions:</div>' + 
+                           sanctions.trim() + '</div>';
+                })
+                
+                // Format restart section (purple)
+                .replace(/\*\*RESTART:\*\* (.*?)(?=\*\*|$)/gs, function(match, restart) {
+                    return '<div class="bg-purple-50 border-l-4 border-purple-400 p-3 rounded-r-lg mb-3">' + 
+                           '<div class="font-bold text-purple-800 mb-1">Restart:</div>' + 
+                           restart.trim() + '</div>';
+                })
+                
+                // Format final decision section (green)
+                .replace(/\*\*FINAL DECISION:\*\* (.*?)(?=\*\*|$)/gs, function(match, decision) {
+                    return '<div class="bg-green-50 border-l-4 border-green-400 p-3 rounded-r-lg mb-3">' + 
+                           '<div class="font-bold text-green-800 mb-1">Final Decision:</div>' + 
+                           decision.trim() + '</div>';
+                })
+                
+                // Format law references
+                .replace(/Law (\d+): ([^.!?]+)/g,
+                    '<div class="rule-reference"><strong>Law $1:</strong> $2</div>')
+                
+                // Add spacing for better readability
                 .replace(/\. /g, '.<br><br>')
                 .replace(/! /g, '!<br><br>')
                 .replace(/\? /g, '?<br><br>')
-                
-                // Highlight AI's final conclusion (last sentence)
-                .replace(/([^.!?]+[.!?]?)$/g, function(match, lastSentence) {
-                    const trimmed = lastSentence.trim();
-                    // Only highlight if it's a substantial sentence (more than 20 characters) and not a law reference
-                    if (trimmed.length > 20 && !trimmed.includes('Law ') && !trimmed.includes('<div class="rule-reference">')) {
-                        return '<br><br><span class="font-bold text-gray-900">' + trimmed + '</span>';
-                    }
-                    return match;
-                })
                 
                 // Clean up multiple line breaks
                 .replace(/<br><br><br>/g, '<br><br>');
@@ -547,7 +561,7 @@
             chatBox.appendChild(errorDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
-    </script>
+    </script>    
 </body>
 </html>
 
