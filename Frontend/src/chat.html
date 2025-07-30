@@ -430,13 +430,71 @@
             if (sender === 'ai') {
                 const formattedText = formatAIResponse(text);
                 bubbleDiv.innerHTML = formattedText;
+                
+                // Add copy button for AI responses
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded text-xs mt-2 transition-colors self-start';
+                copyButton.innerHTML = '<i class="fas fa-copy mr-1"></i>Copy';
+                copyButton.onclick = () => copyToClipboard(text);
+                
+                // Create a container for the message and copy button
+                const containerDiv = document.createElement('div');
+                containerDiv.className = 'flex flex-col';
+                containerDiv.appendChild(bubbleDiv);
+                containerDiv.appendChild(copyButton);
+                
+                messageDiv.appendChild(containerDiv);
             } else {
                 bubbleDiv.textContent = text;
+                messageDiv.appendChild(bubbleDiv);
             }
+<<<<<<< Updated upstream
             
             messageDiv.appendChild(bubbleDiv);
+=======
+
+>>>>>>> Stashed changes
             chatBox.appendChild(messageDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        
+        function copyToClipboard(text) {
+            // Remove HTML formatting for clean text copy
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = text;
+            const cleanText = tempDiv.textContent || tempDiv.innerText || '';
+            
+            navigator.clipboard.writeText(cleanText).then(() => {
+                // Show success feedback
+                const copyBtn = event.target;
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                copyBtn.className = 'copy-btn bg-green-100 hover:bg-green-200 text-green-600 px-2 py-1 rounded text-xs ml-2 transition-colors';
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.className = 'copy-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded text-xs ml-2 transition-colors';
+                }, 2000);
+            }).catch(err => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = cleanText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                // Show success feedback
+                const copyBtn = event.target;
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                copyBtn.className = 'copy-btn bg-green-100 hover:bg-green-200 text-green-600 px-2 py-1 rounded text-xs ml-2 transition-colors';
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.className = 'copy-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded text-xs ml-2 transition-colors';
+                }, 2000);
+            });
         }
         
         function formatAIResponse(text) {
@@ -531,7 +589,7 @@
                 
             } catch (error) {
                 hideTypingIndicator();
-                addErrorMessage(`Connection error: ${error.message}`);
+                addErrorMessage('Unable to connect to the server. Please check your connection and try again.');
             }
         }
         

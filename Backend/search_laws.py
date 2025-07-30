@@ -2,7 +2,10 @@ import json
 from collections import Counter
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import logging
 
+# Get logger
+logger = logging.getLogger(__name__)
 
 # Load FIFA Laws from JSON file
 def load_fifa_laws():
@@ -28,11 +31,12 @@ def search_law(user_query, laws, top_n=3):
     return [(laws[i], similarities[i]) for i in top_indices]  # Return a list of top matches
 
 
-# Load laws
-laws = load_fifa_laws()["laws"]
-print(type(laws))  # Should print <class 'list'>
-
-# Example user query
-user_query = "Can a player take off their shirt when celebrating?"
-result = search_law(user_query, laws)
-print(result)
+# Load laws (only when module is run directly, not when imported)
+if __name__ == "__main__":
+    laws = load_fifa_laws()["laws"]
+    logger.info(f"Loaded {len(laws)} laws from JSON file")
+    
+    # Example user query
+    user_query = "Can a player take off their shirt when celebrating?"
+    result = search_law(user_query, laws)
+    logger.info(f"Search result: {result}")

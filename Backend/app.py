@@ -5,7 +5,15 @@ import os
 import openai
 from dotenv import load_dotenv
 from flask_cors import CORS
+import logging
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%H:%M:%S'
+)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app)
@@ -45,18 +53,19 @@ def test():
 @app.route("/get_rule", methods=["POST"])
 def get_rule():
     try:
-        print("Received request to /get_rule")
+        logger.info("Received request to /get_rule")
         data = request.get_json()
         user_query = data.get("query", "")
-        print(f"User query: {user_query}")
+        logger.debug(f"User query: {user_query}")
 
         if not user_query:
+            logger.warning("No query provided in request")
             return jsonify({"error": "No query provided"}), 400
 
-        print("Searching for relevant laws...")
+        logger.info("Searching for relevant laws...")
         # Retrieve multiple relevant laws
         relevant_laws_with_scores = search_law(user_query, laws, top_n=3)
-        print(f"Found {len(relevant_laws_with_scores)} relevant laws")
+        logger.info(f"Found {len(relevant_laws_with_scores)} relevant laws")
 
         # Format the laws for the AI
         law_context = "\n\n".join([
@@ -80,16 +89,24 @@ def get_rule():
         """
 
         # Call OpenAI API
-        print("Calling OpenAI API...")
+        logger.info("Calling OpenAI API...")
         try:
             response = openai.ChatCompletion.create(
+<<<<<<< Updated upstream
                 model="gpt-4o-mini",
                 messages=[{"role": "user", "content": ai_prompt}],
                 temperature=0.3
             )
             print("OpenAI API call successful")
+=======
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": ai_prompt}],
+            temperature=0.2
+        )
+            logger.info("OpenAI API call successful")
+>>>>>>> Stashed changes
         except Exception as api_error:
-            print(f"OpenAI API error: {api_error}")
+            logger.error(f"OpenAI API error: {api_error}")
             raise api_error
 
         # Handle edge cases where OpenAI might return an empty response
@@ -98,13 +115,13 @@ def get_rule():
         else:
             answer = "I'm sorry, I couldn't generate a response."
             
-        print(f"Generated answer: {answer[:100]}...")  # Print first 100 chars
+        logger.debug(f"Generated answer: {answer[:100]}...")  # Only log first 100 chars in debug mode
 
 
         return jsonify({"response": answer})
 
     except Exception as e:
-        print(f"Error in get_rule: {str(e)}")  # Add this for debugging
+        logger.error(f"Error in get_rule: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 
