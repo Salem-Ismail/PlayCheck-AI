@@ -205,44 +205,44 @@
     </nav>
     
     <!-- Welcome Modal -->
-    <div id="welcome-modal" class="fixed inset-0 flex items-center justify-center z-50 p-4">
-        <div class="welcome-modal rounded-3xl shadow-2xl max-w-2xl w-full mx-4 p-6 max-h-[90vh] overflow-y-auto">
+    <div id="welcome-modal" class="fixed inset-0 flex items-center justify-center z-40 p-4" style="top: 80px;">
+        <div class="welcome-modal rounded-3xl shadow-2xl max-w-2xl w-full mx-4 p-6 max-h-[80vh] overflow-y-auto">
             <div class="text-center">
                 <div class="welcome-icon">
                     <i class="fas fa-comments"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-3">Welcome to PlayCheck AI!</h2>
-                <p class="text-gray-600 mb-6 text-base">Your intelligent assistant for football rules and referee decisions</p>
+                <h2 class="text-xl font-bold text-gray-900 mb-3">Welcome to PlayCheck AI!</h2>
+                <p class="text-gray-600 mb-4 text-sm">Your intelligent assistant for football rules and referee decisions</p>
                 
                 <!-- Feature Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
                     <div class="feature-card">
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
-                            <i class="fas fa-search text-blue-600"></i>
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                            <i class="fas fa-search text-blue-600 text-sm"></i>
                         </div>
-                        <h3 class="font-semibold text-gray-900 mb-2">Smart Search</h3>
-                        <p class="text-sm text-gray-600">Find relevant FIFA laws instantly</p>
+                        <h3 class="font-semibold text-gray-900 mb-1 text-sm">Smart Search</h3>
+                        <p class="text-xs text-gray-600">Find relevant FIFA laws instantly</p>
                     </div>
                     <div class="feature-card">
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
-                            <i class="fas fa-brain text-green-600"></i>
+                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                            <i class="fas fa-brain text-green-600 text-sm"></i>
                         </div>
-                        <h3 class="font-semibold text-gray-900 mb-2">AI Analysis</h3>
-                        <p class="text-sm text-gray-600">Get intelligent rule interpretations</p>
+                        <h3 class="font-semibold text-gray-900 mb-1 text-sm">AI Analysis</h3>
+                        <p class="text-xs text-gray-600">Get intelligent rule interpretations</p>
                     </div>
                     <div class="feature-card">
-                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-3 mx-auto">
-                            <i class="fas fa-chart-line text-purple-600"></i>
+                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                            <i class="fas fa-chart-line text-purple-600 text-sm"></i>
                         </div>
-                        <h3 class="font-semibold text-gray-900 mb-2">Confidence Scores</h3>
-                        <p class="text-sm text-gray-600">Know how certain the AI is</p>
+                        <h3 class="font-semibold text-gray-900 mb-1 text-sm">Confidence Scores</h3>
+                        <p class="text-xs text-gray-600">Know how certain the AI is</p>
                     </div>
-        </div>
+                </div>
         
                 <!-- Quick Tips -->
-                <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-6">
-                    <h4 class="font-semibold text-blue-900 mb-2">💡 Pro Tip</h4>
-                    <p class="text-sm text-blue-800">Describe scenarios in detail for the most accurate answers. Use referee terminology for best results.</p>
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4">
+                    <h4 class="font-semibold text-blue-900 mb-1 text-sm">💡 Pro Tip</h4>
+                    <p class="text-xs text-blue-800">Describe scenarios in detail for the most accurate answers. Use referee terminology for best results.</p>
                 </div>
                 
                 <button id="start-chat-btn" class="start-button text-white px-6 py-3 rounded-xl text-base font-semibold">
@@ -437,18 +437,32 @@
                 copyButton.innerHTML = '<i class="fas fa-copy mr-1"></i>Copy';
                 copyButton.onclick = () => copyToClipboard(text);
                 
-                // Create a container for the message and copy button
+                // Add rating buttons for AI responses
+                const ratingDiv = document.createElement('div');
+                ratingDiv.className = 'flex items-center space-x-2 mt-3';
+                ratingDiv.innerHTML = `
+                    <span class="text-xs text-gray-500">Was this accurate?</span>
+                    <button class="rating-btn bg-green-100 hover:bg-green-200 text-green-600 px-3 py-1 rounded text-xs transition-colors" onclick="rateResponse(this, 'positive', '${encodeURIComponent(text)}')">
+                        <i class="fas fa-thumbs-up mr-1"></i>Yes
+                    </button>
+                    <button class="rating-btn bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded text-xs transition-colors" onclick="rateResponse(this, 'negative', '${encodeURIComponent(text)}')">
+                        <i class="fas fa-thumbs-down mr-1"></i>No
+                    </button>
+                `;
+                
+                // Create a container for the message, copy button, and rating
                 const containerDiv = document.createElement('div');
                 containerDiv.className = 'flex flex-col';
                 containerDiv.appendChild(bubbleDiv);
                 containerDiv.appendChild(copyButton);
+                containerDiv.appendChild(ratingDiv);
                 
                 messageDiv.appendChild(containerDiv);
             } else {
                 bubbleDiv.textContent = text;
                 messageDiv.appendChild(bubbleDiv);
             }
-            
+
             chatBox.appendChild(messageDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
@@ -552,17 +566,42 @@
         
         function showTypingIndicator() {
             const typingDiv = document.createElement('div');
-            typingDiv.className = 'message-bubble mb-3 flex justify-start typing-indicator';
+            typingDiv.className = 'message-bubble mb-3 flex justify-start';
             typingDiv.id = 'typing-indicator';
             
             typingDiv.innerHTML = `
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
+                <div class="bg-white border border-gray-200 rounded-lg p-4 max-w-[80%] shadow-sm">
+                    <div class="flex items-center space-x-3">
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                        </div>
+                        <div class="text-sm text-gray-600 font-medium">Searching FIFA laws...</div>
+                    </div>
+                </div>
             `;
             
             chatBox.appendChild(typingDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // After 2 seconds, change to "Generating response..."
+            setTimeout(() => {
+                if (typingDiv.parentNode) {
+                    typingDiv.innerHTML = `
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 max-w-[80%] shadow-sm">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex space-x-1">
+                                    <div class="w-2 h-2 bg-purple-500 rounded-full animate-bounce"></div>
+                                    <div class="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                                    <div class="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                                </div>
+                                <div class="text-sm text-gray-600 font-medium">Generating response...</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }, 2000);
         }
         
         function hideTypingIndicator() {
@@ -613,6 +652,46 @@
             `;
             chatBox.appendChild(errorDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function rateResponse(button, rating, responseText) {
+            // Get the user's question (last user message)
+            const userMessages = document.querySelectorAll('.user-message');
+            const lastUserMessage = userMessages[userMessages.length - 1];
+            const userQuestion = lastUserMessage ? lastUserMessage.textContent : 'Unknown question';
+            
+            // Visual feedback
+            const allRatingBtns = button.parentElement.querySelectorAll('.rating-btn');
+            allRatingBtns.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+            });
+            
+            if (rating === 'positive') {
+                button.innerHTML = '<i class="fas fa-check mr-1"></i>Thanks!';
+                button.className = 'rating-btn bg-green-200 text-green-700 px-3 py-1 rounded text-xs';
+            } else {
+                button.innerHTML = '<i class="fas fa-check mr-1"></i>Thanks!';
+                button.className = 'rating-btn bg-red-200 text-red-700 px-3 py-1 rounded text-xs';
+            }
+            
+            // Send feedback to backend
+            sendFeedback(userQuestion, responseText, rating);
+        }
+        
+        function sendFeedback(question, response, rating) {
+            fetch('http://127.0.0.1:5000/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question: question,
+                    response: response,
+                    rating: rating,
+                    timestamp: new Date().toISOString()
+                })
+            }).catch(err => {
+                console.log('Feedback sent (offline mode)');
+            });
         }
     </script>    
 </body>

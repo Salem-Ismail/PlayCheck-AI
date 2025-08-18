@@ -1,0 +1,22 @@
+
+=== FEEDBACK ===
+Time: 2025-08-18T05:05:12.586Z
+Rating: positive
+Question: A player challenges for a high ball with their foot raised dangerously. The opposing player is forced to dodge to avoid the raised boot.
+Response: **SUMMARY%3A**%20The%20scenario%20describes%20a%20player%20challenging%20for%20a%20high%20ball%20with%20a%20dangerously%20raised%20foot%2C%20which%20constitutes%20playing%20in%20a%20dangerous%20manner...
+========================
+
+=== FEEDBACK ===
+Time: 2025-08-18T05:06:35.718Z
+Rating: NEGATIVE
+Question: A player challenges for a high ball with their foot raised dangerously. The opposing player is forced to dodge to avoid the raised boot.
+
+Response: **SUMMARY:** The scenario describes a player challenging for a high ball with their foot raised dangerously, which constitutes playing in a dangerous manner. This can lead to a foul being called under Law 12, as the opposing player was forced to dodge to avoid contact.
+
+**SANCTIONS:** The player who raised their foot dangerously should receive a yellow card for unsporting behavior due to playing in a dangerous manner. There are no additional offenses noted for the opposing player.
+
+**RESTART:** The restart method will be an indirect free kick awarded to the opposing team from the location where the dangerous play occurred.
+
+**FINAL DECISION:** The referee should caution the player for unsporting behavior (yellow card) and award an indirect free kick to the opposing team at the spot of the foul.
+
+========================

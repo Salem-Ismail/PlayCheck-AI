@@ -6,6 +6,7 @@ import openai
 from dotenv import load_dotenv
 from flask_cors import CORS
 import logging
+import urllib.parse
 
 # Configure logging
 logging.basicConfig(
@@ -124,6 +125,41 @@ If no specific FIFA Law covers this situation, respond with: "No specific FIFA L
 
     except Exception as e:
         logger.error(f"Error in get_rule: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/feedback", methods=["POST"])
+def receive_feedback():
+    try:
+        data = request.get_json()
+        question = data.get("question", "")
+        response = data.get("response", "")
+        rating = data.get("rating", "")
+        timestamp = data.get("timestamp", "")
+        
+        # Decode URL-encoded response text
+        decoded_response = urllib.parse.unquote(response)
+        
+        # Log feedback to file with better formatting
+        feedback_entry = f"""
+=== FEEDBACK ===
+Time: {timestamp}
+Rating: {rating.upper()}
+Question: {question}
+
+Response: {decoded_response}
+
+========================
+"""
+        
+        with open("feedback_log.txt", "a", encoding="utf-8") as f:
+            f.write(feedback_entry)
+        
+        logger.info(f"Feedback received: {rating} rating")
+        return jsonify({"status": "success"})
+        
+    except Exception as e:
+        logger.error(f"Error processing feedback: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 
