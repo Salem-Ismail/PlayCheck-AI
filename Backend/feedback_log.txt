@@ -20,3 +20,33 @@ Response: **SUMMARY:** The scenario describes a player challenging for a high ba
 **FINAL DECISION:** The referee should caution the player for unsporting behavior (yellow card) and award an indirect free kick to the opposing team at the spot of the foul.
 
 ========================
+
+=== FEEDBACK ===
+Time: 2025-08-18T19:33:48.216Z
+Rating: NEGATIVE
+Question: A player challenges for a high ball with their foot raised dangerously. The opposing player is forced to dodge to avoid the raised boot.
+
+Response: **SUMMARY:** The situation involves a player challenging for a high ball with a raised foot in a dangerous manner, which constitutes playing in a dangerous manner as per Law 12. The opposing player is forced to dodge to avoid contact, indicating potential reckless behavior.
+
+**SANCTIONS:** The player who raised their foot dangerously should receive a yellow card for unsporting behavior due to playing in a dangerous manner. If the referee deems the action to be reckless, a direct free kick may be awarded to the opposing team.
+
+**RESTART:** The restart method will be an indirect free kick awarded to the opposing team from the location where the dangerous play occurred.
+
+**FINAL DECISION:** The referee should caution the player who raised their foot dangerously with a yellow card and award an indirect free kick to the opposing team at the spot of the offense.
+
+========================
+
+=== FEEDBACK ===
+Time: 2025-08-18T20:41:54.110Z
+Rating: POSITIVE
+Question: attacker dives in the penalty area with minimal contact, what is the correct decision'
+
+Response: **SUMMARY:** According to Law 12, a penalty kick is awarded for a direct free kick offense committed by a defender inside their penalty area. However, if the attacker dives with minimal contact and there is no clear foul, the referee must determine if the dive constitutes simulation.
+
+**SANCTIONS:** If the referee determines that the attacker has simulated a foul (dived), a yellow card for unsporting behavior should be issued. If there is no foul committed by the defender, no penalty kick should be awarded.
+
+**RESTART:** If a penalty kick is not awarded due to simulation, the restart should be an indirect free kick for the defending team from the spot where the simulation occurred.
+
+**FINAL DECISION:** The referee should not award a penalty kick, issue a yellow card to the attacker for simulation, and restart the game with an indirect free kick for the defending team.
+
+========================

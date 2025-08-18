@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlayCheck AI - Chat</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -23,10 +28,19 @@
             overflow: hidden;
         }
         
+        body.dark {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
         .chat-container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        body.dark .chat-container {
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid rgba(55, 65, 81, 0.3);
         }
         
         .message-bubble {
@@ -48,6 +62,13 @@
             line-height: 1.6;
         }
         
+        body.dark .ai-message {
+            background: #1f2937;
+            color: #d1d5db;
+            border: 1px solid #374151;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
         .ai-message br {
             display: block;
             content: "";
@@ -64,6 +85,12 @@
             border: 1px solid #e5e7eb;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             max-width: 80px;
+        }
+        
+        body.dark .typing-indicator {
+            background: #1f2937;
+            border: 1px solid #374151;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
         
         .typing-dot {
@@ -115,7 +142,17 @@
             transition: all 0.3s ease;
         }
         
+        body.dark .input-field {
+            background: #1f2937;
+            border: 2px solid #374151;
+        }
+
         .input-field:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        body.dark .input-field:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
@@ -139,10 +176,20 @@
             color: #6b7280;
         }
         
+        body.dark .rule-reference {
+            background: #374151;
+            color: #9ca3af;
+        }
+        
         .welcome-modal {
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        body.dark .welcome-modal {
+            background: rgba(17, 24, 39, 0.98);
+            border: 1px solid rgba(55, 65, 81, 0.3);
         }
         
         .welcome-icon {
@@ -167,9 +214,17 @@
             transition: all 0.3s ease;
         }
         
-        .feature-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        body.dark .feature-card {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            border: 1px solid #4b5563;
+        }
+        
+        body.dark .feature-card h3 {
+            color: #d1d5db;
+        }
+        
+        body.dark .feature-card p {
+            color: #9ca3af;
         }
         
         .start-button {
@@ -187,20 +242,25 @@
 <body class="text-gray-800">
     
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 z-50">
+    <nav class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 z-50 dark:bg-gray-900/90 dark:border-gray-700">
         <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
                     <i class="fas fa-futbol text-white text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-semibold text-gray-900">PlayCheck AI</h1>
-                    <p class="text-xs text-gray-500">Football Rules Assistant</p>
+                    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">PlayCheck AI</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Football Rules Assistant</p>
                 </div>
             </div>
-            <a href="index.html" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                <i class="fas fa-home mr-2"></i>Home
-            </a>
+            <div class="flex items-center space-x-3">
+                                 <button id="dark-mode-toggle" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                     <i class="fas fa-moon"></i>
+                 </button>
+                <a href="index.html" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <i class="fas fa-home mr-2"></i>Home
+                </a>
+            </div>
         </div>
     </nav>
     
@@ -211,38 +271,38 @@
                 <div class="welcome-icon">
                     <i class="fas fa-comments"></i>
                 </div>
-                <h2 class="text-xl font-bold text-gray-900 mb-3">Welcome to PlayCheck AI!</h2>
-                <p class="text-gray-600 mb-4 text-sm">Your intelligent assistant for football rules and referee decisions</p>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Welcome to PlayCheck AI!</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">Your intelligent assistant for football rules and referee decisions</p>
                 
                 <!-- Feature Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
                     <div class="feature-card">
-                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
-                            <i class="fas fa-search text-blue-600 text-sm"></i>
+                        <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                            <i class="fas fa-search text-blue-600 dark:text-blue-400 text-sm"></i>
                         </div>
-                        <h3 class="font-semibold text-gray-900 mb-1 text-sm">Smart Search</h3>
-                        <p class="text-xs text-gray-600">Find relevant FIFA laws instantly</p>
+                        <h3 class="font-semibold text-gray-900 dark:text-white mb-1 text-sm">Smart Search</h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">Find relevant FIFA laws instantly</p>
                     </div>
                     <div class="feature-card">
-                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
-                            <i class="fas fa-brain text-green-600 text-sm"></i>
+                        <div class="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                            <i class="fas fa-brain text-green-600 dark:text-green-400 text-sm"></i>
                         </div>
-                        <h3 class="font-semibold text-gray-900 mb-1 text-sm">AI Analysis</h3>
-                        <p class="text-xs text-gray-600">Get intelligent rule interpretations</p>
+                        <h3 class="font-semibold text-gray-900 dark:text-white mb-1 text-sm">AI Analysis</h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">Get intelligent rule interpretations</p>
                     </div>
                     <div class="feature-card">
-                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
-                            <i class="fas fa-chart-line text-purple-600 text-sm"></i>
+                        <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                            <i class="fas fa-chart-line text-purple-600 dark:text-purple-400 text-sm"></i>
                         </div>
-                        <h3 class="font-semibold text-gray-900 mb-1 text-sm">Confidence Scores</h3>
-                        <p class="text-xs text-gray-600">Know how certain the AI is</p>
+                        <h3 class="font-semibold text-gray-900 dark:text-white mb-1 text-sm">Confidence Scores</h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">Know how certain the AI is</p>
                     </div>
                 </div>
         
                 <!-- Quick Tips -->
-                <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 mb-4">
-                    <h4 class="font-semibold text-blue-900 mb-1 text-sm">💡 Pro Tip</h4>
-                    <p class="text-xs text-blue-800">Describe scenarios in detail for the most accurate answers. Use referee terminology for best results.</p>
+                <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-xl p-3 mb-4">
+                    <h4 class="font-semibold text-blue-900 dark:text-blue-300 mb-1 text-sm">💡 Pro Tip</h4>
+                    <p class="text-xs text-blue-800 dark:text-blue-200">Describe scenarios in detail for the most accurate answers. Use referee terminology for best results.</p>
                 </div>
                 
                 <button id="start-chat-btn" class="start-button text-white px-6 py-3 rounded-xl text-base font-semibold">
@@ -277,17 +337,36 @@
         </div>
 
                 <!-- Chat Messages -->
-                <div class="flex-1 overflow-y-auto p-4 bg-gray-50" id="chat-box">
+                <div class="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-800" id="chat-box">
                     <!-- Messages will be added here -->
                 </div>
                 
                 <!-- Input Area -->
-                <div class="p-4 bg-white border-t border-gray-200">
+                <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+                    <!-- Quick Example Buttons -->
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Quick examples:</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="example-btn bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900 dark:hover:bg-blue-800 dark:text-blue-300 px-3 py-1 rounded-lg text-xs transition-colors" onclick="useExample('While taking a penalty kick, a player kicks the ball with their right foot in such a way that the ball clearly moves, accidentally touches the player\'s left foot and then goes into the goal. What is the correct decision?')">
+                                Double touch penalty
+                            </button>
+                            <button class="example-btn bg-green-100 hover:bg-green-200 text-green-700 dark:bg-green-900 dark:hover:bg-green-800 dark:text-green-300 px-3 py-1 rounded-lg text-xs transition-colors" onclick="useExample('A defending team player takes a free kick and directly kicks the ball accidentally into his/her team\'s own goal. How is play restarted?')">
+                                Own goal from free kick
+                            </button>
+                            <button class="example-btn bg-purple-100 hover:bg-purple-200 text-purple-700 dark:bg-purple-900 dark:hover:bg-purple-800 dark:text-purple-300 px-3 py-1 rounded-lg text-xs transition-colors" onclick="useExample('An attacker is in an offside position at the moment when his/her team-mate takes a free kick. The attacker receives the ball directly and scores a goal. What is the correct decision?')">
+                                Offside from free kick
+                            </button>
+                            <button class="example-btn bg-orange-100 hover:bg-orange-200 text-orange-700 dark:bg-orange-900 dark:hover:bg-orange-800 dark:text-orange-300 px-3 py-1 rounded-lg text-xs transition-colors" onclick="useExample('A defender deliberately handles the ball to prevent a clear goal-scoring opportunity. The ball was going towards an empty goal. What sanctions and restart should the referee award?')">
+                                Deliberate handball preventing goal
+                            </button>
+                        </div>
+                    </div>
+                    
                     <div class="flex items-end space-x-3">
                         <div class="flex-1">
                             <textarea 
                                 id="chat-input" 
-                                class="input-field w-full p-3 rounded-xl resize-none focus:outline-none transition-all duration-300"
+                                class="input-field w-full p-3 rounded-xl resize-none focus:outline-none transition-all duration-300 dark:text-white dark:placeholder-gray-400"
                                 placeholder="Describe a football scenario or ask about a rule..."
                                 rows="1"
                                 style="min-height: 48px; max-height: 100px;"
@@ -299,9 +378,9 @@
                             disabled
                         >
                             <i class="fas fa-paper-plane"></i>
-            </button>
+                        </button>
                     </div>
-                    <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
+                    <div class="mt-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                         <span>Press Enter to send</span>
                         <span id="char-count">0 characters</span>
                     </div>
@@ -313,25 +392,25 @@
     
     <!-- Help Modal -->
     <div id="help-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-2xl p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">How to Get the Best Answers</h3>
-                <button id="close-help" class="text-gray-400 hover:text-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">How to Get the Best Answers</h3>
+                <button id="close-help" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="space-y-4">
-                <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded">
-                    <h4 class="font-medium text-green-800 mb-2">✅ Best Examples:</h4>
-                    <p class="text-sm text-green-700">"A defender deliberately handles the ball in the penalty area with no attempt to play the ball. Does the referee award a penalty and issue a red card for denying a goal?"</p>
+                <div class="bg-green-50 dark:bg-green-900/30 border-l-4 border-green-400 p-4 rounded">
+                    <h4 class="font-medium text-green-800 dark:text-green-300 mb-2">✅ Best Examples:</h4>
+                    <p class="text-sm text-green-700 dark:text-green-200">"A defender deliberately handles the ball in the penalty area with no attempt to play the ball. Does the referee award a penalty and issue a red card for denying a goal?"</p>
                 </div>
-                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
-                    <h4 class="font-medium text-yellow-800 mb-2">🟡 Good Examples:</h4>
-                    <p class="text-sm text-yellow-700">"A player's hand touches the ball inside the penalty area. What is the referee's decision?"</p>
+                <div class="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-400 p-4 rounded">
+                    <h4 class="font-medium text-yellow-800 dark:text-yellow-300 mb-2">🟡 Good Examples:</h4>
+                    <p class="text-sm text-yellow-700 dark:text-yellow-200">"A player's hand touches the ball inside the penalty area. What is the referee's decision?"</p>
                 </div>
-                <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded">
-                    <h4 class="font-medium text-red-800 mb-2">❌ Avoid:</h4>
-                    <p class="text-sm text-red-700">"Handball in the penalty box?" (too vague)</p>
+                <div class="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-400 p-4 rounded">
+                    <h4 class="font-medium text-red-800 dark:text-red-300 mb-2">❌ Avoid:</h4>
+                    <p class="text-sm text-red-700 dark:text-red-200">"Handball in the penalty box?" (too vague)</p>
                 </div>
             </div>
             <div class="mt-6 flex justify-end">
@@ -355,6 +434,7 @@
         const helpModal = document.getElementById('help-modal');
         const closeHelp = document.getElementById('close-help');
         const gotItBtn = document.getElementById('got-it-btn');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
         
         // Start chat button
         startChatBtn.addEventListener('click', () => {
@@ -433,7 +513,7 @@
                 
                 // Add copy button for AI responses
                 const copyButton = document.createElement('button');
-                copyButton.className = 'copy-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded text-xs mt-2 transition-colors self-start';
+                copyButton.className = 'copy-btn bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs mt-2 transition-colors self-start';
                 copyButton.innerHTML = '<i class="fas fa-copy mr-1"></i>Copy';
                 copyButton.onclick = () => copyToClipboard(text);
                 
@@ -441,11 +521,11 @@
                 const ratingDiv = document.createElement('div');
                 ratingDiv.className = 'flex items-center space-x-2 mt-3';
                 ratingDiv.innerHTML = `
-                    <span class="text-xs text-gray-500">Was this accurate?</span>
-                    <button class="rating-btn bg-green-100 hover:bg-green-200 text-green-600 px-3 py-1 rounded text-xs transition-colors" onclick="rateResponse(this, 'positive', '${encodeURIComponent(text)}')">
+                    <span class="text-xs text-gray-500 dark:text-gray-400">Was this accurate?</span>
+                    <button class="rating-btn bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-300 px-3 py-1 rounded text-xs transition-colors" onclick="rateResponse(this, 'positive', '${encodeURIComponent(text)}')">
                         <i class="fas fa-thumbs-up mr-1"></i>Yes
                     </button>
-                    <button class="rating-btn bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded text-xs transition-colors" onclick="rateResponse(this, 'negative', '${encodeURIComponent(text)}')">
+                    <button class="rating-btn bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-600 dark:text-red-300 px-3 py-1 rounded text-xs transition-colors" onclick="rateResponse(this, 'negative', '${encodeURIComponent(text)}')">
                         <i class="fas fa-thumbs-down mr-1"></i>No
                     </button>
                 `;
@@ -478,11 +558,11 @@
                 const copyBtn = event.target;
                 const originalText = copyBtn.innerHTML;
                 copyBtn.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
-                copyBtn.className = 'copy-btn bg-green-100 hover:bg-green-200 text-green-600 px-2 py-1 rounded text-xs ml-2 transition-colors';
+                copyBtn.className = 'copy-btn bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-300 px-2 py-1 rounded text-xs ml-2 transition-colors';
                 
                 setTimeout(() => {
                     copyBtn.innerHTML = originalText;
-                    copyBtn.className = 'copy-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded text-xs ml-2 transition-colors';
+                    copyBtn.className = 'copy-btn bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs ml-2 transition-colors';
                 }, 2000);
             }).catch(err => {
                 // Fallback for older browsers
@@ -497,11 +577,11 @@
                 const copyBtn = event.target;
                 const originalText = copyBtn.innerHTML;
                 copyBtn.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
-                copyBtn.className = 'copy-btn bg-green-100 hover:bg-green-200 text-green-600 px-2 py-1 rounded text-xs ml-2 transition-colors';
+                copyBtn.className = 'copy-btn bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-600 dark:text-green-300 px-2 py-1 rounded text-xs ml-2 transition-colors';
                 
                 setTimeout(() => {
                     copyBtn.innerHTML = originalText;
-                    copyBtn.className = 'copy-btn bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded text-xs ml-2 transition-colors';
+                    copyBtn.className = 'copy-btn bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs ml-2 transition-colors';
                 }, 2000);
             });
         }
@@ -530,23 +610,23 @@
                 
                 // Format sanctions section (yellow)
                 .replace(/\*\*SANCTIONS:\*\* (.*?)(?=\*\*|$)/gs, function(match, sanctions) {
-                    return '<div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-r-lg mb-3">' + 
-                           '<div class="font-bold text-yellow-800 mb-1">Sanctions:</div>' + 
-                           sanctions.trim() + '</div>';
+                    return '<div class="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-400 p-3 rounded-r-lg mb-3">' + 
+                           '<div class="font-bold text-yellow-800 dark:text-yellow-300 mb-1">Sanctions:</div>' + 
+                           '<div class="text-black dark:text-white">' + sanctions.trim() + '</div></div>';
                 })
                 
                 // Format restart section (purple)
                 .replace(/\*\*RESTART:\*\* (.*?)(?=\*\*|$)/gs, function(match, restart) {
-                    return '<div class="bg-purple-50 border-l-4 border-purple-400 p-3 rounded-r-lg mb-3">' + 
-                           '<div class="font-bold text-purple-800 mb-1">Restart:</div>' + 
-                           restart.trim() + '</div>';
+                    return '<div class="bg-purple-50 dark:bg-purple-900/30 border-l-4 border-purple-400 p-3 rounded-r-lg mb-3">' + 
+                           '<div class="font-bold text-purple-800 dark:text-purple-300 mb-1">Restart:</div>' + 
+                           '<div class="text-black dark:text-white">' + restart.trim() + '</div></div>';
                 })
                 
                 // Format final decision section (green)
                 .replace(/\*\*FINAL DECISION:\*\* (.*?)(?=\*\*|$)/gs, function(match, decision) {
-                    return '<div class="bg-green-50 border-l-4 border-green-400 p-3 rounded-r-lg mb-3">' + 
-                           '<div class="font-bold text-green-800 mb-1">Final Decision:</div>' + 
-                           decision.trim() + '</div>';
+                    return '<div class="bg-green-50 dark:bg-green-900/30 border-l-4 border-green-400 p-3 rounded-r-lg mb-3">' + 
+                           '<div class="font-bold text-green-800 dark:text-green-300 mb-1">Final Decision:</div>' + 
+                           '<div class="text-black dark:text-white">' + decision.trim() + '</div></div>';
                 })
                 
                 // Format law references
@@ -693,6 +773,38 @@
                 console.log('Feedback sent (offline mode)');
             });
         }
+
+        function useExample(exampleText) {
+            chatInput.value = exampleText;
+            chatInput.style.height = 'auto';
+            charCount.textContent = exampleText.length + ' characters';
+            sendBtn.disabled = false;
+        }
+
+                 // Dark mode toggle
+         const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+         const currentScheme = localStorage.getItem('theme') || (prefersDarkScheme.matches ? 'dark' : 'light');
+         document.body.classList.add(currentScheme);
+         
+         // Set initial icon based on current theme
+         if (currentScheme === 'dark') {
+             darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+         } else {
+             darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+         }
+
+                 darkModeToggle.addEventListener('click', () => {
+             const isDark = document.body.classList.contains('dark');
+             if (isDark) {
+                 document.body.classList.remove('dark');
+                 localStorage.setItem('theme', 'light');
+                 darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+             } else {
+                 document.body.classList.add('dark');
+                 localStorage.setItem('theme', 'dark');
+                 darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+             }
+         });
     </script>    
 </body>
 </html>
