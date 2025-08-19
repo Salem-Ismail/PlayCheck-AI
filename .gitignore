@@ -43,6 +43,7 @@ desktop.ini
 # Logs
 *.log
 logs/
+feedback_log.txt
 
 # Temporary files
 *.tmp
