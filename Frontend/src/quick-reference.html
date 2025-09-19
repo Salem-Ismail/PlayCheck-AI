@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Reference - PlayCheck AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .glass-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .reference-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .reference-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .reference-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-expanded {
+            transform: scale(1.02);
+            z-index: 10;
+        }
+        
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .card-content.expanded {
+            max-height: 1000px;
+        }
+        
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .restarts { background: linear-gradient(135deg, #3B82F6, #1D4ED8); }
+        .cards { background: linear-gradient(135deg, #F59E0B, #D97706); }
+        .offside { background: linear-gradient(135deg, #10B981, #059669); }
+        .handball { background: linear-gradient(135deg, #EF4444, #DC2626); }
+        .equipment { background: linear-gradient(135deg, #8B5CF6, #7C3AED); }
+        .signals { background: linear-gradient(135deg, #06B6D4, #0891B2); }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 min-h-screen transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="navbar fixed top-0 left-0 w-full shadow-md z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center space-x-3">
+                <div class="logo-icon">
+                    <i class="fas fa-futbol text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">PlayCheck AI</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Quick Reference</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="reference-tools.html" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    <i class="fas fa-arrow-left mr-1"></i>Back to Tools
+                </a>
+                <a href="chat.html" class="cta-button text-white px-6 py-3 rounded-xl text-base font-semibold">
+                    <i class="fas fa-comments mr-2"></i>Chat
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-24 pb-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <!-- Hero Section -->
+            <div class="text-center mb-12">
+                <div class="glass-card rounded-3xl p-8 mb-8">
+                    <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                        <i class="fas fa-bookmark text-blue-600 mr-3"></i>
+                        Quick Reference Cards
+                    </h1>
+                    <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                        Essential reference information for quick decision-making on the field. 
+                        Click any card to expand and see detailed information.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Reference Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Restarts Card -->
+                <div class="reference-card glass-card rounded-2xl p-6" onclick="toggleCard(this)">
+                    <div class="flex items-center mb-4">
+                        <div class="category-icon restarts mr-4">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">Restarts</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">How to restart play</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                            <div class="flex justify-between">
+                                <span class="font-semibold">Free Kick:</span>
+                                <span>Direct or Indirect</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-semibold">Penalty Kick:</span>
+                                <span>12 yards from goal</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-semibold">Throw-in:</span>
+                                <span>From touchline</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-semibold">Goal Kick:</span>
+                                <span>From 6-yard box</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-semibold">Corner Kick:</span>
+                                <span>From corner arc</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-semibold">Dropped Ball:</span>
+                                <span>Neutral restart</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards Card -->
+                <div class="reference-card glass-card rounded-2xl p-6" onclick="toggleCard(this)">
+                    <div class="flex items-center mb-4">
+                        <div class="category-icon cards mr-4">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">Cards</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">When to show cards</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                            <div class="border-l-4 border-yellow-400 pl-3">
+                                <span class="font-semibold text-yellow-600">Yellow Card:</span>
+                                <ul class="mt-1 space-y-1">
+                                    <li>• Unsporting behavior</li>
+                                    <li>• Dissent</li>
+                                    <li>• Persistent infringement</li>
+                                    <li>• Delaying restart</li>
+                                </ul>
+                            </div>
+                            <div class="border-l-4 border-red-400 pl-3">
+                                <span class="font-semibold text-red-600">Red Card:</span>
+                                <ul class="mt-1 space-y-1">
+                                    <li>• Serious foul play</li>
+                                    <li>• Violent conduct</li>
+                                    <li>• Denying goal opportunity</li>
+                                    <li>• Offensive language</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Offside Card -->
+                <div class="reference-card glass-card rounded-2xl p-6" onclick="toggleCard(this)">
+                    <div class="flex items-center mb-4">
+                        <div class="category-icon offside mr-4">
+                            <i class="fas fa-flag"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">Offside</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Offside basics</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                            <div class="font-semibold text-green-600">Offside Position:</div>
+                            <ul class="space-y-1">
+                                <li>• Closer to goal than ball</li>
+                                <li>• Closer to goal than 2nd last opponent</li>
+                                <li>• In opponent's half</li>
+                            </ul>
+                            <div class="font-semibold text-green-600 mt-3">Involved in Play:</div>
+                            <ul class="space-y-1">
+                                <li>• Interfering with play</li>
+                                <li>• Interfering with opponent</li>
+                                <li>• Gaining advantage</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Handball Card -->
+                <div class="reference-card glass-card rounded-2xl p-6" onclick="toggleCard(this)">
+                    <div class="flex items-center mb-4">
+                        <div class="category-icon handball mr-4">
+                            <i class="fas fa-hand-paper"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">Handball</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Handball decisions</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                            <div class="font-semibold text-red-600">Handball Offense:</div>
+                            <ul class="space-y-1">
+                                <li>• Deliberate hand/arm contact</li>
+                                <li>• Hand/arm above shoulder</li>
+                                <li>• Hand/arm makes body bigger</li>
+                                <li>• Hand/arm in unnatural position</li>
+                            </ul>
+                            <div class="font-semibold text-green-600 mt-3">Not Handball:</div>
+                            <ul class="space-y-1">
+                                <li>• Ball hits hand/arm directly</li>
+                                <li>• Hand/arm close to body</li>
+                                <li>• Supporting body in fall</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equipment Card -->
+                <div class="reference-card glass-card rounded-2xl p-6" onclick="toggleCard(this)">
+                    <div class="flex items-center mb-4">
+                        <div class="category-icon equipment mr-4">
+                            <i class="fas fa-tshirt"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">Equipment</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Required equipment</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                            <div class="font-semibold text-purple-600">Required:</div>
+                            <ul class="space-y-1">
+                                <li>• Shirt with sleeves</li>
+                                <li>• Shorts</li>
+                                <li>• Socks</li>
+                                <li>• Shinguards</li>
+                                <li>• Footwear</li>
+                            </ul>
+                            <div class="font-semibold text-purple-600 mt-3">Prohibited:</div>
+                            <ul class="space-y-1">
+                                <li>• Jewelry</li>
+                                <li>• Dangerous equipment</li>
+                                <li>• Electronic devices</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Signals Card -->
+                <div class="reference-card glass-card rounded-2xl p-6" onclick="toggleCard(this)">
+                    <div class="flex items-center mb-4">
+                        <div class="category-icon signals mr-4">
+                            <i class="fas fa-hand-paper"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">Signals</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Referee signals</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                            <div class="font-semibold text-cyan-600">Common Signals:</div>
+                            <ul class="space-y-1">
+                                <li>• Direct free kick: Point forward</li>
+                                <li>• Indirect free kick: Arm raised</li>
+                                <li>• Goal: Point to center</li>
+                                <li>• Corner kick: Point to corner</li>
+                                <li>• Goal kick: Point to 6-yard box</li>
+                                <li>• Advantage: Both arms forward</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="mt-12 text-center">
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Need More Help?</h3>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <a href="chat.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+                            <i class="fas fa-comments mr-2"></i>Ask AI Assistant
+                        </a>
+                        <a href="law-browser.html" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+                            <i class="fas fa-book mr-2"></i>Browse Laws
+                        </a>
+                        <a href="decision-trees.html" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+                            <i class="fas fa-sitemap mr-2"></i>Decision Trees
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleCard(card) {
+            const content = card.querySelector('.card-content');
+            const isExpanded = content.classList.contains('expanded');
+            
+            // Close all other cards
+            document.querySelectorAll('.card-content').forEach(c => {
+                c.classList.remove('expanded');
+            });
+            document.querySelectorAll('.reference-card').forEach(c => {
+                c.classList.remove('card-expanded');
+            });
+            
+            // Toggle current card
+            if (!isExpanded) {
+                content.classList.add('expanded');
+                card.classList.add('card-expanded');
+            }
+        }
+
+        // Close cards when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.reference-card')) {
+                document.querySelectorAll('.card-content').forEach(c => {
+                    c.classList.remove('expanded');
+                });
+                document.querySelectorAll('.reference-card').forEach(c => {
+                    c.classList.remove('card-expanded');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
