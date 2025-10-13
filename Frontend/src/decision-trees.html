@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Trees - PlayCheck AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .dark .glass {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tree-node {
+            transition: all 0.3s ease;
+        }
+        .tree-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .tree-connection {
+            stroke: rgba(255, 255, 255, 0.6);
+            stroke-width: 2;
+            fill: none;
+        }
+        .tree-connection.active {
+            stroke: #10b981;
+            stroke-width: 3;
+        }
+        .flow-arrow {
+            position: relative;
+        }
+        .flow-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 15px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg dark:bg-gray-900 transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 z-50 dark:bg-gray-900/90 dark:border-gray-700">
+        <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-futbol text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">PlayCheck AI</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Football Rules Assistant</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button id="darkModeToggle" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <a href="reference-tools.html" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <i class="fas fa-tools mr-2"></i>Tools
+                </a>
+                <a href="scenarios-simple.html" class="bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <i class="fas fa-graduation-cap mr-2"></i>Training
+                </a>
+                <a href="decision-trees.html" class="bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:hover:bg-purple-800 text-purple-700 dark:text-purple-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <i class="fas fa-sitemap mr-2"></i>Trees
+                </a>
+                <a href="chat.html" class="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <i class="fas fa-comments mr-2"></i>Chat
+                </a>
+                <a href="index.html" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <i class="fas fa-home mr-2"></i>Home
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-4">Interactive Decision Trees</h1>
+            <p class="text-white/80 text-lg">Step-by-step decision making for complex referee scenarios</p>
+        </div>
+
+        <!-- Tree Selection -->
+        <div class="glass rounded-2xl p-6 mb-8">
+            <h2 class="text-2xl font-semibold text-white mb-6">Choose a Decision Tree</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <button class="tree-selector bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300" data-tree="foul">
+                    <i class="fas fa-running text-2xl mb-2"></i>
+                    <h3 class="font-semibold">Foul Decision</h3>
+                    <p class="text-sm opacity-90">Is it a foul or not?</p>
+                </button>
+                <button class="tree-selector bg-gradient-to-r from-red-500 to-red-600 text-white p-4 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300" data-tree="cards">
+                    <i class="fas fa-id-card text-2xl mb-2"></i>
+                    <h3 class="font-semibold">Card Decision</h3>
+                    <p class="text-sm opacity-90">Yellow, red, or no card?</p>
+                </button>
+                <button class="tree-selector bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-300" data-tree="offside">
+                    <i class="fas fa-flag text-2xl mb-2"></i>
+                    <h3 class="font-semibold">Offside Decision</h3>
+                    <p class="text-sm opacity-90">Is the player offside?</p>
+                </button>
+                <button class="tree-selector bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4 rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all duration-300" data-tree="handball">
+                    <i class="fas fa-hand-paper text-2xl mb-2"></i>
+                    <h3 class="font-semibold">Handball Decision</h3>
+                    <p class="text-sm opacity-90">Deliberate or accidental?</p>
+                </button>
+                <button class="tree-selector bg-gradient-to-r from-yellow-500 to-yellow-600 text-white p-4 rounded-xl hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300" data-tree="restart">
+                    <i class="fas fa-sync-alt text-2xl mb-2"></i>
+                    <h3 class="font-semibold">Restart Decision</h3>
+                    <p class="text-sm opacity-90">What type of restart?</p>
+                </button>
+                <button class="tree-selector bg-gradient-to-r from-indigo-500 to-indigo-600 text-white p-4 rounded-xl hover:from-indigo-600 hover:to-indigo-700 transition-all duration-300" data-tree="advantage">
+                    <i class="fas fa-forward text-2xl mb-2"></i>
+                    <h3 class="font-semibold">Advantage Decision</h3>
+                    <p class="text-sm opacity-90">Play advantage or stop play?</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Decision Tree Display -->
+        <div id="treeContainer" class="hidden">
+            <!-- Tree Header -->
+            <div class="glass rounded-2xl p-6 mb-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 id="treeTitle" class="text-2xl font-semibold text-white"></h2>
+                        <p id="treeDescription" class="text-white/80"></p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button id="resetTree" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-redo mr-2"></i>Reset
+                        </button>
+                        <button id="backToSelection" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i>Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tree Flow -->
+            <div id="treeFlow" class="space-y-8">
+                <!-- Tree nodes will be dynamically generated here -->
+            </div>
+
+            <!-- Final Decision -->
+            <div id="finalDecision" class="hidden">
+                <div class="glass rounded-2xl p-8 text-center">
+                    <div class="text-6xl mb-4">🎯</div>
+                    <h3 class="text-3xl font-bold text-white mb-4">Final Decision</h3>
+                    <div id="decisionResult" class="text-xl text-white/90 mb-6"></div>
+                    <div id="decisionExplanation" class="text-white/80 leading-relaxed mb-6"></div>
+                    <div class="flex justify-center space-x-4">
+                        <button id="tryAgain" class="bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300">
+                            Try Another Scenario
+                        </button>
+                        <a href="chat.html" class="bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-700 transition-all duration-300 inline-block">
+                            Ask AI Assistant
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            body.classList.add('dark');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark');
+            const isDark = body.classList.contains('dark');
+            darkModeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // Decision tree data
+        const decisionTrees = {
+            foul: {
+                title: "Foul Decision Tree",
+                description: "Determine if a challenge constitutes a foul",
+                nodes: [
+                    {
+                        id: "start",
+                        type: "question",
+                        text: "Was there contact between the players?",
+                        options: [
+                            { text: "Yes, there was contact", next: "contact_type" },
+                            { text: "No, no contact made", next: "no_foul" }
+                        ]
+                    },
+                    {
+                        id: "contact_type",
+                        type: "question", 
+                        text: "What type of contact occurred?",
+                        options: [
+                            { text: "Player tripped opponent", next: "trip_foul" },
+                            { text: "Player pushed opponent", next: "push_foul" },
+                            { text: "Player kicked opponent", next: "kick_foul" },
+                            { text: "Player jumped into opponent", next: "jump_foul" },
+                            { text: "Player held opponent", next: "hold_foul" },
+                            { text: "Other contact", next: "other_contact" }
+                        ]
+                    },
+                    {
+                        id: "trip_foul",
+                        type: "question",
+                        text: "Was the tripping intentional?",
+                        options: [
+                            { text: "Yes, deliberate trip", next: "direct_foul" },
+                            { text: "No, accidental trip", next: "accidental_trip" }
+                        ]
+                    },
+                    {
+                        id: "push_foul",
+                        type: "result",
+                        text: "Direct Free Kick",
+                        explanation: "Pushing an opponent is a direct free kick offense under Law 12."
+                    },
+                    {
+                        id: "kick_foul",
+                        type: "result", 
+                        text: "Direct Free Kick",
+                        explanation: "Kicking an opponent is a direct free kick offense under Law 12."
+                    },
+                    {
+                        id: "jump_foul",
+                        type: "result",
+                        text: "Direct Free Kick", 
+                        explanation: "Jumping at an opponent is a direct free kick offense under Law 12."
+                    },
+                    {
+                        id: "hold_foul",
+                        type: "result",
+                        text: "Direct Free Kick",
+                        explanation: "Holding an opponent is a direct free kick offense under Law 12."
+                    },
+                    {
+                        id: "direct_foul",
+                        type: "result",
+                        text: "Direct Free Kick",
+                        explanation: "Deliberate tripping is a direct free kick offense under Law 12."
+                    },
+                    {
+                        id: "accidental_trip",
+                        type: "result",
+                        text: "No Foul - Play On",
+                        explanation: "Accidental contact without carelessness, recklessness, or excessive force is not a foul."
+                    },
+                    {
+                        id: "other_contact",
+                        type: "result",
+                        text: "Consider Law 12",
+                        explanation: "Evaluate if the contact was careless, reckless, or used excessive force. If yes, direct free kick. If no, play on."
+                    },
+                    {
+                        id: "no_foul",
+                        type: "result",
+                        text: "No Foul - Play On",
+                        explanation: "No contact means no foul. Allow play to continue."
+                    }
+                ]
+            },
+            cards: {
+                title: "Card Decision Tree",
+                description: "Determine appropriate disciplinary action",
+                nodes: [
+                    {
+                        id: "start",
+                        type: "question",
+                        text: "Was a foul committed?",
+                        options: [
+                            { text: "Yes, a foul occurred", next: "foul_severity" },
+                            { text: "No, but unsporting behavior", next: "unsporting" },
+                            { text: "No foul, no misconduct", next: "no_card" }
+                        ]
+                    },
+                    {
+                        id: "foul_severity",
+                        type: "question",
+                        text: "How severe was the foul?",
+                        options: [
+                            { text: "Careless (normal challenge)", next: "no_card" },
+                            { text: "Reckless (endangers opponent)", next: "yellow_card" },
+                            { text: "Excessive force/violence", next: "red_card" }
+                        ]
+                    },
+                    {
+                        id: "unsporting",
+                        type: "question",
+                        text: "What type of unsporting behavior?",
+                        options: [
+                            { text: "Dissent, simulation, delaying restart", next: "yellow_card" },
+                            { text: "Serious foul play", next: "red_card" },
+                            { text: "Violent conduct", next: "red_card" },
+                            { text: "Offensive language/gestures", next: "red_card" }
+                        ]
+                    },
+                    {
+                        id: "yellow_card",
+                        type: "result",
+                        text: "Yellow Card",
+                        explanation: "Show yellow card for reckless play or unsporting behavior. Award appropriate restart."
+                    },
+                    {
+                        id: "red_card",
+                        type: "result",
+                        text: "Red Card",
+                        explanation: "Show red card for serious foul play, violent conduct, or offensive language. Player must leave field. Award appropriate restart."
+                    },
+                    {
+                        id: "no_card",
+                        type: "result",
+                        text: "No Card",
+                        explanation: "Careless play or no misconduct. Award appropriate restart without disciplinary action."
+                    }
+                ]
+            },
+            offside: {
+                title: "Offside Decision Tree",
+                description: "Determine if a player is in an offside position",
+                nodes: [
+                    {
+                        id: "start",
+                        type: "question",
+                        text: "Where is the player when the ball is played?",
+                        options: [
+                            { text: "In own half", next: "not_offside" },
+                            { text: "In opponent's half", next: "check_position" }
+                        ]
+                    },
+                    {
+                        id: "check_position",
+                        type: "question",
+                        text: "Is the player closer to the goal line than the ball?",
+                        options: [
+                            { text: "Yes, closer than ball", next: "check_second_last" },
+                            { text: "No, behind or level with ball", next: "not_offside" }
+                        ]
+                    },
+                    {
+                        id: "check_second_last",
+                        type: "question",
+                        text: "Is the player closer to the goal line than the second-last opponent?",
+                        options: [
+                            { text: "Yes, closer than second-last opponent", next: "check_involvement" },
+                            { text: "No, behind or level with second-last opponent", next: "not_offside" }
+                        ]
+                    },
+                    {
+                        id: "check_involvement",
+                        type: "question",
+                        text: "Does the player become involved in active play?",
+                        options: [
+                            { text: "Yes, touches ball or interferes", next: "offside" },
+                            { text: "No, not involved in play", next: "not_offside" }
+                        ]
+                    },
+                    {
+                        id: "offside",
+                        type: "result",
+                        text: "Offside - Indirect Free Kick",
+                        explanation: "Player was in an offside position and became involved in active play. Award indirect free kick to defending team."
+                    },
+                    {
+                        id: "not_offside",
+                        type: "result",
+                        text: "Not Offside - Play On",
+                        explanation: "Player was not in an offside position or did not become involved in active play. Allow play to continue."
+                    }
+                ]
+            },
+            handball: {
+                title: "Handball Decision Tree",
+                description: "Determine if handball offense occurred",
+                nodes: [
+                    {
+                        id: "start",
+                        type: "question",
+                        text: "Did the ball touch the player's hand/arm?",
+                        options: [
+                            { text: "Yes, ball touched hand/arm", next: "check_deliberate" },
+                            { text: "No, ball did not touch hand/arm", next: "no_handball" }
+                        ]
+                    },
+                    {
+                        id: "check_deliberate",
+                        type: "question",
+                        text: "Was the hand/arm movement deliberate?",
+                        options: [
+                            { text: "Yes, deliberate movement", next: "deliberate_handball" },
+                            { text: "No, accidental contact", next: "check_position" }
+                        ]
+                    },
+                    {
+                        id: "check_position",
+                        type: "question",
+                        text: "Was the hand/arm in an unnatural position?",
+                        options: [
+                            { text: "Yes, unnatural position", next: "handball" },
+                            { text: "No, natural position", next: "check_advantage" }
+                        ]
+                    },
+                    {
+                        id: "check_advantage",
+                        type: "question",
+                        text: "Did the player gain an advantage?",
+                        options: [
+                            { text: "Yes, gained advantage", next: "handball" },
+                            { text: "No, no advantage gained", next: "no_handball" }
+                        ]
+                    },
+                    {
+                        id: "deliberate_handball",
+                        type: "result",
+                        text: "Handball - Direct Free Kick",
+                        explanation: "Deliberate handball is a direct free kick offense. Consider disciplinary action if preventing goal or goal-scoring opportunity."
+                    },
+                    {
+                        id: "handball",
+                        type: "result",
+                        text: "Handball - Direct Free Kick",
+                        explanation: "Handball due to unnatural position or gaining advantage. Award direct free kick."
+                    },
+                    {
+                        id: "no_handball",
+                        type: "result",
+                        text: "No Handball - Play On",
+                        explanation: "Accidental contact with hand/arm in natural position without gaining advantage. Allow play to continue."
+                    }
+                ]
+            },
+            restart: {
+                title: "Restart Decision Tree",
+                description: "Determine the correct restart method",
+                nodes: [
+                    {
+                        id: "start",
+                        type: "question",
+                        text: "How did the ball go out of play?",
+                        options: [
+                            { text: "Ball crossed goal line (goal scored)", next: "goal" },
+                            { text: "Ball crossed goal line (no goal)", next: "goal_line" },
+                            { text: "Ball crossed touchline", next: "touchline" },
+                            { text: "Foul committed", next: "foul_restart" },
+                            { text: "Offside", next: "offside_restart" }
+                        ]
+                    },
+                    {
+                        id: "goal",
+                        type: "result",
+                        text: "Kick-off",
+                        explanation: "Goal scored. Restart with kick-off by the team that conceded the goal."
+                    },
+                    {
+                        id: "goal_line",
+                        type: "question",
+                        text: "Which team last touched the ball?",
+                        options: [
+                            { text: "Attacking team", next: "goal_kick" },
+                            { text: "Defending team", next: "corner_kick" }
+                        ]
+                    },
+                    {
+                        id: "touchline",
+                        type: "result",
+                        text: "Throw-in",
+                        explanation: "Ball crossed touchline. Award throw-in to the team that did not last touch the ball."
+                    },
+                    {
+                        id: "foul_restart",
+                        type: "question",
+                        text: "What type of foul was committed?",
+                        options: [
+                            { text: "Direct free kick offense", next: "direct_free_kick" },
+                            { text: "Indirect free kick offense", next: "indirect_free_kick" },
+                            { text: "Penalty kick offense", next: "penalty_kick" }
+                        ]
+                    },
+                    {
+                        id: "offside_restart",
+                        type: "result",
+                        text: "Indirect Free Kick",
+                        explanation: "Offside offense. Award indirect free kick to defending team from where the offside player was involved."
+                    },
+                    {
+                        id: "goal_kick",
+                        type: "result",
+                        text: "Goal Kick",
+                        explanation: "Attacking team last touched ball. Award goal kick to defending team from anywhere in goal area."
+                    },
+                    {
+                        id: "corner_kick",
+                        type: "result",
+                        text: "Corner Kick",
+                        explanation: "Defending team last touched ball. Award corner kick to attacking team from nearest corner arc."
+                    },
+                    {
+                        id: "direct_free_kick",
+                        type: "result",
+                        text: "Direct Free Kick",
+                        explanation: "Direct free kick offense committed. Award direct free kick from where the offense occurred."
+                    },
+                    {
+                        id: "indirect_free_kick",
+                        type: "result",
+                        text: "Indirect Free Kick",
+                        explanation: "Indirect free kick offense committed. Award indirect free kick from where the offense occurred."
+                    },
+                    {
+                        id: "penalty_kick",
+                        type: "result",
+                        text: "Penalty Kick",
+                        explanation: "Direct free kick offense committed by defending team in their own penalty area. Award penalty kick."
+                    }
+                ]
+            },
+            advantage: {
+                title: "Advantage Decision Tree",
+                description: "Determine whether to play advantage or stop play",
+                nodes: [
+                    {
+                        id: "start",
+                        type: "question",
+                        text: "Was a foul committed?",
+                        options: [
+                            { text: "Yes, a foul occurred", next: "check_advantage" },
+                            { text: "No, no foul", next: "play_on" }
+                        ]
+                    },
+                    {
+                        id: "check_advantage",
+                        type: "question",
+                        text: "Does the fouled team have possession?",
+                        options: [
+                            { text: "Yes, they have the ball", next: "check_benefit" },
+                            { text: "No, they don't have possession", next: "stop_play" }
+                        ]
+                    },
+                    {
+                        id: "check_benefit",
+                        type: "question",
+                        text: "Is the fouled team in a promising position?",
+                        options: [
+                            { text: "Yes, good attacking position", next: "play_advantage" },
+                            { text: "No, not in good position", next: "stop_play" }
+                        ]
+                    },
+                    {
+                        id: "play_advantage",
+                        type: "result",
+                        text: "Play Advantage",
+                        explanation: "Fouled team has possession and is in a promising position. Play advantage and signal with both arms. If advantage doesn't materialize within 2-3 seconds, stop play and award the free kick."
+                    },
+                    {
+                        id: "stop_play",
+                        type: "result",
+                        text: "Stop Play - Award Free Kick",
+                        explanation: "No advantage to be gained. Stop play immediately and award the appropriate free kick to the fouled team."
+                    },
+                    {
+                        id: "play_on",
+                        type: "result",
+                        text: "Play On",
+                        explanation: "No foul committed. Allow play to continue normally."
+                    }
+                ]
+            }
+        };
+
+        // Current state
+        let currentTree = null;
+        let currentNodeId = "start";
+        let visitedNodes = new Set();
+
+        // DOM elements
+        const treeSelectors = document.querySelectorAll('.tree-selector');
+        const treeContainer = document.getElementById('treeContainer');
+        const treeTitle = document.getElementById('treeTitle');
+        const treeDescription = document.getElementById('treeDescription');
+        const treeFlow = document.getElementById('treeFlow');
+        const finalDecision = document.getElementById('finalDecision');
+        const resetTree = document.getElementById('resetTree');
+        const backToSelection = document.getElementById('backToSelection');
+        const tryAgain = document.getElementById('tryAgain');
+
+        // Tree selection
+        treeSelectors.forEach(selector => {
+            selector.addEventListener('click', () => {
+                const treeType = selector.dataset.tree;
+                loadTree(treeType);
+            });
+        });
+
+        // Load tree
+        function loadTree(treeType) {
+            currentTree = decisionTrees[treeType];
+            currentNodeId = "start";
+            visitedNodes.clear();
+            
+            treeTitle.textContent = currentTree.title;
+            treeDescription.textContent = currentTree.description;
+            
+            document.querySelector('.glass').style.display = 'none';
+            treeContainer.classList.remove('hidden');
+            finalDecision.classList.add('hidden');
+            
+            renderTree();
+        }
+
+        // Render tree
+        function renderTree() {
+            treeFlow.innerHTML = '';
+            
+            // Find current node
+            const currentNode = currentTree.nodes.find(node => node.id === currentNodeId);
+            if (!currentNode) return;
+
+            // Mark as visited
+            visitedNodes.add(currentNodeId);
+
+            // Create node element
+            const nodeElement = createNodeElement(currentNode);
+            treeFlow.appendChild(nodeElement);
+
+            // Add connection lines for previous nodes
+            addConnectionLines();
+        }
+
+        // Create node element
+        function createNodeElement(node) {
+            const nodeDiv = document.createElement('div');
+            nodeDiv.className = 'tree-node flow-arrow';
+            nodeDiv.id = `node-${node.id}`;
+
+            if (node.type === 'question') {
+                nodeDiv.innerHTML = `
+                    <div class="glass rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">
+                                <i class="fas fa-question"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white">Question</h3>
+                        </div>
+                        <p class="text-white/90 text-lg mb-6">${node.text}</p>
+                        <div class="space-y-3">
+                            ${node.options.map((option, index) => `
+                                <button class="option-btn w-full p-4 text-left rounded-lg border-2 border-white/20 text-white hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-300" 
+                                        data-next="${option.next}">
+                                    <span class="font-semibold mr-3">${String.fromCharCode(65 + index)})</span>
+                                    <span>${option.text}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else if (node.type === 'result') {
+                nodeDiv.innerHTML = `
+                    <div class="glass rounded-2xl p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white">Decision</h3>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-2xl font-bold text-green-400 mb-4">${node.text}</h4>
+                            <p class="text-white/80 leading-relaxed">${node.explanation}</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Show final decision section
+                setTimeout(() => {
+                    finalDecision.classList.remove('hidden');
+                    document.getElementById('decisionResult').textContent = node.text;
+                    document.getElementById('decisionExplanation').textContent = node.explanation;
+                }, 500);
+            }
+
+            // Add event listeners for options
+            nodeDiv.querySelectorAll('.option-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const nextNodeId = btn.dataset.next;
+                    currentNodeId = nextNodeId;
+                    renderTree();
+                });
+            });
+
+            return nodeDiv;
+        }
+
+        // Add connection lines
+        function addConnectionLines() {
+            // This is a simplified version - in a real implementation you'd use SVG
+            // For now, we'll just add visual flow with CSS
+        }
+
+        // Reset tree
+        resetTree.addEventListener('click', () => {
+            if (currentTree) {
+                currentNodeId = "start";
+                visitedNodes.clear();
+                finalDecision.classList.add('hidden');
+                renderTree();
+            }
+        });
+
+        // Back to selection
+        backToSelection.addEventListener('click', () => {
+            treeContainer.classList.add('hidden');
+            document.querySelector('.glass').style.display = 'block';
+        });
+
+        // Try again
+        tryAgain.addEventListener('click', () => {
+            backToSelection.click();
+        });
+    </script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 import json
 from flask import Flask, request, jsonify
 from search_laws import search_law, load_fifa_laws
+from database import DatabaseManager
 import os
 import openai
 from dotenv import load_dotenv
@@ -24,9 +25,17 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 openai.api_key = OPENAI_API_KEY
 
-# Load FIFA Laws of the Game JSON
-with open("fifa_laws.json", "r", encoding="utf-8") as file:
-    fifa_laws = json.load(file)
+# Initialize database manager
+import os
+print(f"Current working directory: {os.getcwd()}")
+print(f"Database file exists: {os.path.exists('playcheck.db')}")
+db_manager = DatabaseManager()
+db_manager.connect()
+
+# Database connected for FIFA laws (AI chat functionality)
+
+# Load FIFA Laws from database
+fifa_laws = {"laws": db_manager.get_all_laws()}
 
 laws = load_fifa_laws()["laws"]
 
@@ -50,6 +59,10 @@ def home():
 @app.route("/test", methods=["GET"])
 def test():
     return jsonify({"message": "Backend is working!"})
+
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "healthy", "message": "Backend server is running"})
 
 @app.route("/get_rule", methods=["POST"])
 def get_rule():
@@ -161,6 +174,9 @@ Response: {decoded_response}
     except Exception as e:
         logger.error(f"Error processing feedback: {str(e)}")
         return jsonify({"error": str(e)}), 500
+
+
+# Scenario endpoints removed - using simple frontend JavaScript instead
 
 
 if __name__ == "__main__":
