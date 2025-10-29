@@ -257,16 +257,16 @@
                 
                 <!-- Navigation Links -->
                 <div class="hidden md:flex items-center space-x-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
-                    <a href="index.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                    <a href="/" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
                 <i class="fas fa-home mr-2"></i>Home
             </a>
-                    <a href="reference-tools.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                    <a href="/tools" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
                         <i class="fas fa-tools mr-2"></i>Tools
                     </a>
-                    <a href="scenarios-simple.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                    <a href="/training" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
                         <i class="fas fa-graduation-cap mr-2"></i>Training
                     </a>
-                    <a href="decision-trees.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                    <a href="/trees" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
                         <i class="fas fa-sitemap mr-2"></i>Trees
                     </a>
                 </div>
@@ -450,7 +450,7 @@
         async function updateConnectionStatus() {
             try {
                 // Try to ping the backend server
-                const response = await fetch('http://localhost:5000/health', {
+                const response = await fetch('/health', {
                     method: 'GET',
                     timeout: 3000
                 });
@@ -734,7 +734,7 @@
         
         async function fetchResponse(message) {
             try {
-                const response = await fetch('http://127.0.0.1:5000/get_rule', {
+            const response = await fetch('/get_rule', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ query: message })
@@ -801,7 +801,7 @@
         }
         
         function sendFeedback(question, response, rating) {
-            fetch('http://127.0.0.1:5000/feedback', {
+            fetch('/feedback', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
