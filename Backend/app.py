@@ -1,5 +1,5 @@
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from search_laws import search_law, load_fifa_laws
 from database import DatabaseManager
 import os
@@ -18,6 +18,9 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+
+# Frontend directory (for serving static HTML pages)
+FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..", "Frontend", "src")
 CORS(app)
 
 # Load environment variables
@@ -47,11 +50,32 @@ def find_relevant_law(user_query):
 
 @app.route("/")
 def home():
-    return """
-    <h1>PlayCheck AI Football Rules Assistant</h1>
-    <p>Backend is running successfully!</p>
-    <p>Open <a href="../Frontend/src/chat.html">chat.html</a> to use the chat interface.</p>
-    """
+    return send_from_directory(FRONTEND_DIR, "index.html")
+
+
+@app.route("/chat")
+def serve_chat():
+    return send_from_directory(FRONTEND_DIR, "chat.html")
+
+
+@app.route("/trees")
+def serve_trees():
+    return send_from_directory(FRONTEND_DIR, "decision-trees.html")
+
+
+@app.route("/training")
+def serve_training():
+    return send_from_directory(FRONTEND_DIR, "scenarios-simple.html")
+
+
+@app.route("/tools")
+def serve_tools():
+    return send_from_directory(FRONTEND_DIR, "reference-tools.html")
+
+
+@app.route("/quick-reference")
+def serve_quick_reference():
+    return send_from_directory(FRONTEND_DIR, "quick-reference.html")
 
 @app.route("/test", methods=["GET"])
 def test():
