@@ -24,8 +24,7 @@
         
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
         }
         
         body.dark {
@@ -146,7 +145,7 @@
             background: #1f2937;
             border: 2px solid #374151;
         }
-
+        
         .input-field:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -239,36 +238,39 @@
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-gray-800 dark">
     
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 z-50 dark:bg-gray-900/90 dark:border-gray-700">
-        <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-futbol text-white text-lg"></i>
+    <nav class="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200 z-50 dark:bg-gray-900/95 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo Section -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-futbol text-white text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">PlayCheck AI</h1>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Football Rules Assistant</p>
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">PlayCheck AI</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Football Rules Assistant</p>
                 </div>
             </div>
-            <div class="flex items-center space-x-3">
-                <button id="dark-mode-toggle" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <a href="reference-tools.html" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-tools mr-2"></i>Tools
-                </a>
-                <a href="scenarios-simple.html" class="bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-graduation-cap mr-2"></i>Training
-                </a>
-                <a href="decision-trees.html" class="bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:hover:bg-purple-800 text-purple-700 dark:text-purple-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-sitemap mr-2"></i>Trees
-                </a>
-                <a href="index.html" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-home mr-2"></i>Home
-                </a>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
+                    <a href="index.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                <i class="fas fa-home mr-2"></i>Home
+            </a>
+                    <a href="reference-tools.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-tools mr-2"></i>Tools
+                    </a>
+                    <a href="scenarios-simple.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-graduation-cap mr-2"></i>Training
+                    </a>
+                    <a href="decision-trees.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-sitemap mr-2"></i>Trees
+                    </a>
+                </div>
+                
             </div>
         </div>
     </nav>
@@ -306,7 +308,7 @@
                         <h3 class="font-semibold text-gray-900 dark:text-white mb-1 text-sm">Confidence Scores</h3>
                         <p class="text-xs text-gray-600 dark:text-gray-400">Know how certain the AI is</p>
                     </div>
-                </div>
+        </div>
         
                 <!-- Quick Tips -->
                 <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-xl p-3 mb-4">
@@ -387,7 +389,7 @@
                             disabled
                         >
                             <i class="fas fa-paper-plane"></i>
-                        </button>
+            </button>
                     </div>
                     <div class="mt-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                         <span>Press Enter to send</span>
@@ -474,7 +476,6 @@
         updateConnectionStatus();
         const closeHelp = document.getElementById('close-help');
         const gotItBtn = document.getElementById('got-it-btn');
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
         
         // Start chat button
         startChatBtn.addEventListener('click', () => {
@@ -638,8 +639,8 @@
                         /Confidence: \d+%/,
                         `<span class="confidence-badge">${confidence}% confident</span>`
                     );
-                }
-            }
+        }
+    }
             
             // Format structured sections with specific color coding
             formatted = formatted
@@ -821,30 +822,6 @@
             sendBtn.disabled = false;
         }
 
-                 // Dark mode toggle
-         const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-         const currentScheme = localStorage.getItem('theme') || (prefersDarkScheme.matches ? 'dark' : 'light');
-         document.body.classList.add(currentScheme);
-         
-         // Set initial icon based on current theme
-         if (currentScheme === 'dark') {
-             darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-         } else {
-             darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-         }
-
-                 darkModeToggle.addEventListener('click', () => {
-             const isDark = document.body.classList.contains('dark');
-             if (isDark) {
-                 document.body.classList.remove('dark');
-                 localStorage.setItem('theme', 'light');
-                 darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-             } else {
-                 document.body.classList.add('dark');
-                 localStorage.setItem('theme', 'dark');
-                 darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-             }
-         });
     </script>    
 </body>
 </html>

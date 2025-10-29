@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scenario Library - PlayCheck AI</title>
+    <title>Training - Coming Soon · PlayCheck AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        body.dark .gradient-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         }
         .glass {
             background: rgba(255, 255, 255, 0.1);
@@ -19,377 +23,91 @@
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        
+        /* Animation classes */
+        .header-collapsed {
+            height: 0;
+            padding: 0;
+            margin: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .content-expanded {
+            margin-top: -60px;
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .quiz-section {
+            transition: all 0.5s ease-in-out;
+        }
+        
+        /* Ensure no scrolling */
+        body {
+            overflow: hidden;
+        }
+        
+        .main-content {
+            height: calc(100vh - 80px); /* Account for navbar height */
+            overflow: hidden;
+        }
     </style>
 </head>
-<body class="min-h-screen gradient-bg dark:bg-gray-900 transition-colors duration-300">
+<body class="min-h-screen gradient-bg dark:bg-gray-900 transition-colors duration-300 dark flex flex-col">
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 z-50 dark:bg-gray-900/90 dark:border-gray-700">
-        <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-futbol text-white text-lg"></i>
+    <nav class="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200 z-50 dark:bg-gray-900/95 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo Section -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-futbol text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">PlayCheck AI</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Football Rules Assistant</p>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">PlayCheck AI</h1>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Football Rules Assistant</p>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
+                    <a href="index.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="reference-tools.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-tools mr-2"></i>Tools
+                    </a>
+                    <a href="scenarios-simple.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-graduation-cap mr-2"></i>Training
+                    </a>
+                    <a href="decision-trees.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-sitemap mr-2"></i>Trees
+                    </a>
                 </div>
-            </div>
-            <div class="flex items-center space-x-3">
-                <button id="darkModeToggle" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <a href="reference-tools.html" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-tools mr-2"></i>Tools
-                </a>
-                <a href="scenarios-simple.html" class="bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-graduation-cap mr-2"></i>Training
-                </a>
-                <a href="decision-trees.html" class="bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:hover:bg-purple-800 text-purple-700 dark:text-purple-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-sitemap mr-2"></i>Trees
-                </a>
-                <a href="chat.html" class="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-comments mr-2"></i>Chat
-                </a>
+                
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="max-w-4xl mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-white mb-4">Scenario Library</h1>
-            <p class="text-white/80 text-lg">Test your referee knowledge with real IFAB scenarios</p>
-        </div>
-
-        <!-- Filter Section -->
-        <div class="glass rounded-2xl p-6 mb-8">
-            <h2 class="text-2xl font-semibold text-white mb-6">Choose Your Training</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-white/80 mb-2">Law</label>
-                    <select id="lawFilter" class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white">
-                        <option value="all">All Laws</option>
-                        <option value="11">Law 11 - Offside</option>
-                        <option value="12">Law 12 - Fouls & Misconduct</option>
-                        <option value="14">Law 14 - The Penalty Kick</option>
-                        <option value="15">Law 15 - The Throw-in</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-white/80 mb-2">Difficulty</label>
-                    <select id="difficultyFilter" class="w-full p-3 rounded-lg bg-white/10 border border-white/20 text-white">
-                        <option value="all">All Levels</option>
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
-                    </select>
-                </div>
-            </div>
-            <button id="startTraining" class="w-full mt-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300">
-                Start Training
-            </button>
-        </div>
-
-        <!-- Quiz Section (Hidden Initially) -->
-        <div id="quizSection" class="hidden">
-            <!-- Progress Bar -->
-            <div class="glass rounded-2xl p-6 mb-6">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-white font-semibold">Question <span id="currentQuestion">1</span> of <span id="totalQuestions">8</span></span>
-                    <span class="text-white/80">Score: <span id="score">0</span>/<span id="maxScore">8</span></span>
-                </div>
-                <div class="w-full bg-white/20 rounded-full h-2">
-                    <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-300" style="width: 12.5%"></div>
-                </div>
-            </div>
-
-            <!-- Question Card -->
-            <div class="glass rounded-2xl p-8 mb-6">
-                <div class="mb-6">
-                    <div class="flex items-center mb-4">
-                        <span id="questionLaw" class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold mr-3">Law 11</span>
-                        <span id="questionDifficulty" class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">Beginner</span>
+    <div class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full main-content">
+        <section class="pt-24 pb-12 px-4">
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-white/10 backdrop-blur-md rounded-3xl p-10 text-center border border-white/20">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <i class="fas fa-graduation-cap text-white text-2xl"></i>
                     </div>
-                    <h3 id="questionText" class="text-white text-xl leading-relaxed"></h3>
-                </div>
-
-                <div class="space-y-4">
-                    <button class="option-btn w-full p-4 text-left rounded-lg border-2 border-white/20 text-white hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-300" data-option="A">
-                        <span class="font-semibold mr-3">A)</span>
-                        <span class="option-text"></span>
-                    </button>
-                    <button class="option-btn w-full p-4 text-left rounded-lg border-2 border-white/20 text-white hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-300" data-option="B">
-                        <span class="font-semibold mr-3">B)</span>
-                        <span class="option-text"></span>
-                    </button>
-                    <button class="option-btn w-full p-4 text-left rounded-lg border-2 border-white/20 text-white hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-300" data-option="C">
-                        <span class="font-semibold mr-3">C)</span>
-                        <span class="option-text"></span>
-                    </button>
-                    <button class="option-btn w-full p-4 text-left rounded-lg border-2 border-white/20 text-white hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-300" data-option="D">
-                        <span class="font-semibold mr-3">D)</span>
-                        <span class="option-text"></span>
-                    </button>
+                    <h1 class="text-4xl font-bold text-white mb-3">Training Center</h1>
+                    <p class="text-white/80 text-lg max-w-xl mx-auto mb-6">Coming soon.</p>
+                    <p class="text-white/70 text-sm max-w-xl mx-auto">We're polishing interactive quizzes and guided practice. Check back after launch.</p>
+                    <div class="mt-8">
+                        <a href="decision-trees.html" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 inline-block">Use Decision Trees</a>
+                    </div>
                 </div>
             </div>
-
-            <!-- Explanation Card (Hidden Initially) -->
-            <div id="explanationCard" class="glass rounded-2xl p-6 mb-6 hidden">
-                <h4 class="text-white font-semibold mb-3">Explanation:</h4>
-                <p id="explanationText" class="text-white/80 leading-relaxed"></p>
-                <button id="nextQuestion" class="mt-4 bg-gradient-to-r from-green-500 to-blue-600 text-white py-2 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300">
-                    Next Question
-                </button>
-            </div>
-        </div>
-
-        <!-- Results Section (Hidden Initially) -->
-        <div id="resultsSection" class="hidden">
-            <div class="glass rounded-2xl p-8 text-center">
-                <h2 class="text-3xl font-bold text-white mb-4">Quiz Complete!</h2>
-                <div class="text-6xl mb-4">
-                    <span id="finalScore" class="text-green-400">0</span>/<span class="text-white">8</span>
-                </div>
-                <p id="finalMessage" class="text-white/80 text-lg mb-6"></p>
-                <div class="space-x-4">
-                    <button id="retakeQuiz" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300">
-                        Retake Quiz
-                    </button>
-                    <a href="chat.html" class="bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300 inline-block">
-                        Ask AI Assistant
-                    </a>
-                </div>
-            </div>
-        </div>
+        </section>
     </div>
-
-    <script>
-        // Dark mode functionality
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const body = document.body;
-        
-        // Check for saved theme preference or default to light mode
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        if (currentTheme === 'dark') {
-            body.classList.add('dark');
-            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-        
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark');
-            const isDark = body.classList.contains('dark');
-            darkModeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-
-        // Scenario data
-        const scenarios = [
-            {
-                id: 1,
-                law: 11,
-                difficulty: "Beginner",
-                question: "An attacker takes a corner kick to a team-mate. The team-mate then passes the ball back to the kicker, who is in an offside position and plays the ball. What is the correct decision?",
-                options: {
-                    A: "Award offside - indirect free kick",
-                    B: "No offside - allow play to continue", 
-                    C: "Award offside - direct free kick",
-                    D: "Consult VAR"
-                },
-                correct: "A",
-                explanation: "IFAB Answer: The referee must award an indirect free kick to the opposing team."
-            },
-            {
-                id: 2,
-                law: 12,
-                difficulty: "Beginner", 
-                question: "A player challenges for a high ball with their foot raised dangerously. The opposing player is forced to dodge to avoid the raised boot. What is the correct decision?",
-                options: {
-                    A: "Award a direct free kick and show a yellow card",
-                    B: "Award an indirect free kick and show a yellow card",
-                    C: "Award a direct free kick and show a red card",
-                    D: "Allow play to continue (advantage)"
-                },
-                correct: "B",
-                explanation: "This is playing in a dangerous manner (indirect free kick) and reckless play (yellow card)."
-            },
-            {
-                id: 3,
-                law: 14,
-                difficulty: "Advanced",
-                question: "During penalties (penalty shoot-out), a player slips while taking a penalty. The ball accidentally touches the player's non-kicking foot immediately after the kick and then goes into the goal. What is the correct decision?",
-                options: {
-                    A: "Retake the penalty",
-                    B: "Award goal",
-                    C: "Award goal kick", 
-                    D: "Award corner kick"
-                },
-                correct: "A",
-                explanation: "IFAB Answer: The kick is retaken because the second touch was accidental and occurred immediately after the first touch."
-            },
-            {
-                id: 4,
-                law: 15,
-                difficulty: "Intermediate",
-                question: "While taking a throw-in, a player holds the ball over the head and then drops it onto the ground inside the field of play. What is the correct decision?",
-                options: {
-                    A: "Opposing team takes the throw-in",
-                    B: "Retake the throw-in",
-                    C: "Award a free kick to opposing team",
-                    D: "Allow play to continue"
-                },
-                correct: "A", 
-                explanation: "IFAB Answer: Law 15 clearly states that the thrower must 'throw' the ball. If the ball is 'dropped', and not thrown, the opposing team will take the throw-in."
-            }
-        ];
-
-        // Quiz state
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let filteredScenarios = [];
-        let selectedAnswer = null;
-
-        // DOM elements
-        const filterSection = document.querySelector('.glass');
-        const quizSection = document.getElementById('quizSection');
-        const resultsSection = document.getElementById('resultsSection');
-        const startTrainingBtn = document.getElementById('startTraining');
-        const lawFilter = document.getElementById('lawFilter');
-        const difficultyFilter = document.getElementById('difficultyFilter');
-
-        // Start training
-        startTrainingBtn.addEventListener('click', () => {
-            const selectedLaw = lawFilter.value;
-            const selectedDifficulty = difficultyFilter.value;
-            
-            // Filter scenarios
-            filteredScenarios = scenarios.filter(scenario => {
-                const lawMatch = selectedLaw === 'all' || scenario.law.toString() === selectedLaw;
-                const difficultyMatch = selectedDifficulty === 'all' || scenario.difficulty === selectedDifficulty;
-                return lawMatch && difficultyMatch;
-            });
-
-            if (filteredScenarios.length === 0) {
-                alert('No scenarios found for the selected criteria. Please try different filters.');
-                return;
-            }
-
-            // Reset quiz state
-            currentQuestionIndex = 0;
-            score = 0;
-            selectedAnswer = null;
-
-            // Show quiz section
-            filterSection.style.display = 'none';
-            quizSection.classList.remove('hidden');
-            resultsSection.classList.add('hidden');
-
-            // Start first question
-            showQuestion();
-        });
-
-        // Show current question
-        function showQuestion() {
-            const scenario = filteredScenarios[currentQuestionIndex];
-            
-            // Update progress
-            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
-            document.getElementById('totalQuestions').textContent = filteredScenarios.length;
-            document.getElementById('score').textContent = score;
-            document.getElementById('maxScore').textContent = filteredScenarios.length;
-            document.getElementById('progressBar').style.width = `${((currentQuestionIndex + 1) / filteredScenarios.length) * 100}%`;
-
-            // Update question info
-            document.getElementById('questionLaw').textContent = `Law ${scenario.law}`;
-            document.getElementById('questionDifficulty').textContent = scenario.difficulty;
-            document.getElementById('questionText').textContent = scenario.question;
-
-            // Update options
-            const optionButtons = document.querySelectorAll('.option-btn');
-            optionButtons.forEach((btn, index) => {
-                const option = ['A', 'B', 'C', 'D'][index];
-                btn.querySelector('.option-text').textContent = scenario.options[option];
-                btn.disabled = false;
-                btn.classList.remove('bg-green-500', 'bg-red-500', 'border-green-400', 'border-red-400');
-                btn.classList.add('border-white/20');
-            });
-
-            // Hide explanation
-            document.getElementById('explanationCard').classList.add('hidden');
-        }
-
-        // Handle option selection
-        document.querySelectorAll('.option-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (btn.disabled) return;
-                
-                selectedAnswer = btn.dataset.option;
-                const scenario = filteredScenarios[currentQuestionIndex];
-                
-                // Disable all buttons
-                document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-                
-                // Show correct/incorrect answers
-                document.querySelectorAll('.option-btn').forEach(b => {
-                    const option = b.dataset.option;
-                    if (option === scenario.correct) {
-                        b.classList.add('bg-green-500', 'border-green-400');
-                    } else if (option === selectedAnswer && option !== scenario.correct) {
-                        b.classList.add('bg-red-500', 'border-red-400');
-                    }
-                });
-
-                // Update score
-                if (selectedAnswer === scenario.correct) {
-                    score++;
-                }
-
-                // Show explanation
-                document.getElementById('explanationText').textContent = scenario.explanation;
-                document.getElementById('explanationCard').classList.remove('hidden');
-            });
-        });
-
-        // Next question
-        document.getElementById('nextQuestion').addEventListener('click', () => {
-            currentQuestionIndex++;
-            
-            if (currentQuestionIndex < filteredScenarios.length) {
-                showQuestion();
-            } else {
-                showResults();
-            }
-        });
-
-        // Show results
-        function showResults() {
-            quizSection.classList.add('hidden');
-            resultsSection.classList.remove('hidden');
-            
-            document.getElementById('finalScore').textContent = score;
-            
-            const percentage = Math.round((score / filteredScenarios.length) * 100);
-            let message = '';
-            
-            if (percentage >= 90) {
-                message = "Excellent! You're ready for the big leagues! 🏆";
-            } else if (percentage >= 70) {
-                message = "Great job! You're well on your way! ⭐";
-            } else if (percentage >= 50) {
-                message = "Good effort! Keep studying and you'll improve! 📚";
-            } else {
-                message = "Keep practicing! Every expert was once a beginner! 💪";
-            }
-            
-            document.getElementById('finalMessage').textContent = message;
-        }
-
-        // Retake quiz
-        document.getElementById('retakeQuiz').addEventListener('click', () => {
-            filterSection.style.display = 'block';
-            quizSection.classList.add('hidden');
-            resultsSection.classList.add('hidden');
-        });
-    </script>
+    
 </body>
 </html>

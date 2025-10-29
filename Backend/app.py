@@ -25,10 +25,7 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 openai.api_key = OPENAI_API_KEY
 
-# Initialize database manager
-import os
-print(f"Current working directory: {os.getcwd()}")
-print(f"Database file exists: {os.path.exists('playcheck.db')}")
+# Initialize database manager (no stdout prints in production)
 db_manager = DatabaseManager()
 db_manager.connect()
 
@@ -180,4 +177,9 @@ Response: {decoded_response}
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Production-ready configuration
+    debug_mode = os.getenv("FLASK_DEBUG", "False").lower() == "true"
+    port = int(os.getenv("PORT", 5000))
+    host = os.getenv("HOST", "0.0.0.0")
+    
+    app.run(debug=debug_mode, host=host, port=port)

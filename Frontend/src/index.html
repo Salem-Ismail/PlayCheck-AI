@@ -22,10 +22,19 @@
             min-height: 100vh;
         }
         
+        body.dark {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
         .hero-container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        body.dark .hero-container {
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid rgba(55, 65, 81, 0.3);
         }
         
         .feature-card {
@@ -34,6 +43,11 @@
             border-radius: 12px;
             padding: 20px;
             transition: all 0.3s ease;
+        }
+        
+        body.dark .feature-card {
+            background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+            border: 1px solid #4b5563;
         }
         
         .feature-card:hover {
@@ -58,6 +72,11 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
+        body.dark .navbar {
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid rgba(55, 65, 81, 0.3);
+        }
+        
         .logo-icon {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 12px;
@@ -66,33 +85,38 @@
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-gray-800 dark">
     
     <!-- Navbar -->
-    <nav class="navbar fixed top-0 left-0 w-full shadow-md z-50">
-        <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
-            <div class="flex items-center space-x-3">
-                <div class="logo-icon">
-                    <i class="fas fa-futbol text-lg"></i>
+    <nav class="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200 z-50 dark:bg-gray-900/95 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo Section -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-futbol text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">PlayCheck AI</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Football Rules Assistant</p>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-xl font-semibold text-gray-900">PlayCheck AI</h1>
-                    <p class="text-xs text-gray-500">Football Rules Assistant</p>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
+                    <a href="index.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="reference-tools.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-tools mr-2"></i>Tools
+                    </a>
+                    <a href="scenarios-simple.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-graduation-cap mr-2"></i>Training
+                    </a>
+                    <a href="decision-trees.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-sitemap mr-2"></i>Trees
+                    </a>
                 </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <a href="reference-tools.html" class="text-gray-600 hover:text-gray-900 transition-colors">
-                    <i class="fas fa-tools mr-1"></i>Reference Tools
-                </a>
-                <a href="scenarios-simple.html" class="text-green-600 hover:text-green-800 transition-colors">
-                    <i class="fas fa-graduation-cap mr-1"></i>Training
-                </a>
-                <a href="decision-trees.html" class="text-purple-600 hover:text-purple-800 transition-colors">
-                    <i class="fas fa-sitemap mr-1"></i>Decision Trees
-                </a>
-                <a href="chat.html" class="cta-button text-white px-6 py-3 rounded-xl text-base font-semibold">
-                    <i class="fas fa-play mr-2"></i>Get Started
-                </a>
             </div>
         </div>
     </nav>
@@ -103,8 +127,8 @@
             <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-8">
                 <i class="fas fa-robot text-white text-3xl"></i>
             </div>
-            <h1 class="text-5xl font-bold text-gray-900 mb-6">Rules Clarified, Decisions Simplified</h1>
-            <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">AI-powered football rule analysis to help referees, players, and fans understand the game with confidence.</p>
+            <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-6">Rules Clarified, Decisions Simplified</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">AI-powered football rule analysis to help referees, players, and fans understand the game with confidence.</p>
             <a href="chat.html" class="cta-button text-white px-8 py-4 rounded-xl text-lg font-semibold inline-flex items-center">
                 <i class="fas fa-rocket mr-2"></i>Try PlayCheck AI
             </a>
@@ -124,24 +148,24 @@
                     <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-edit text-blue-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Input a Match Situation</h3>
-                    <p class="text-gray-600">Describe any in-game scenario in detail, and PlayCheck AI will analyze and break it down based on official rules.</p>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Input a Match Situation</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Describe any in-game scenario in detail, and PlayCheck AI will analyze and break it down based on official rules.</p>
                 </div>
                 
                 <div class="feature-card text-center">
                     <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-brain text-green-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">AI Rule Interpretation</h3>
-                    <p class="text-gray-600">PlayCheck AI references FIFA's Laws of the Game to carefully assess the situation and determine the most relevant rulings.</p>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">AI Rule Interpretation</h3>
+                    <p class="text-gray-600 dark:text-gray-300">PlayCheck AI references FIFA's Laws of the Game to carefully assess the situation and determine the most relevant rulings.</p>
                 </div>
                 
                 <div class="feature-card text-center">
                     <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-check-circle text-purple-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Receive Instant Decision</h3>
-                    <p class="text-gray-600">Get a detailed explanation of the decision with rule references, helping you improve your understanding and judgment.</p>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Receive Instant Decision</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Get a detailed explanation of the decision with rule references, helping you improve your understanding and judgment.</p>
                 </div>
             </div>
         </div>

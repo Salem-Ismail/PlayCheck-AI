@@ -21,6 +21,11 @@
         .reference-card {
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            z-index: 1;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
         }
         
         .reference-card:hover {
@@ -35,16 +40,19 @@
         .card-expanded {
             transform: scale(1.02);
             z-index: 10;
+            position: relative;
         }
         
         .card-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease;
+            opacity: 0;
         }
         
         .card-content.expanded {
             max-height: 1000px;
+            opacity: 1;
         }
         
         .category-icon {
@@ -108,7 +116,7 @@
             </div>
 
             <!-- Reference Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                 
                 <!-- Restarts Card -->
                 <div class="reference-card glass-card rounded-2xl p-6" onclick="toggleCard(this)">
@@ -145,7 +153,7 @@
                             </div>
                             <div class="flex justify-between">
                                 <span class="font-semibold">Dropped Ball:</span>
-                                <span>Neutral restart</span>
+                                <span>Where play was last stopped</span>
                             </div>
                         </div>
                     </div>
@@ -163,23 +171,50 @@
                         </div>
                     </div>
                     <div class="card-content">
-                        <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                        <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
                             <div class="border-l-4 border-yellow-400 pl-3">
-                                <span class="font-semibold text-yellow-600">Yellow Card:</span>
-                                <ul class="mt-1 space-y-1">
-                                    <li>• Unsporting behavior</li>
-                                    <li>• Dissent</li>
-                                    <li>• Persistent infringement</li>
-                                    <li>• Delaying restart</li>
+                                <span class="font-semibold text-yellow-600">Yellow Card (Cautionable Offences):</span>
+                                <ul class="mt-2 space-y-2">
+                                    <li>• <strong>Unsporting behaviour:</strong>
+                                        <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                            <li>◦ Reckless challenge</li>
+                                            <li>◦ Throwing objects</li>
+                                            <li>◦ Sarcastic gestures</li>
+                                            <li>◦ Showing lack of respect for match officials or the game</li>
+                                        </ul>
+                                    </li>
+                                    <li>• <strong>Dissent</strong> by word or action</li>
+                                    <li>• <strong>Persistent infringement</strong> of the Laws of the Game</li>
+                                    <li>• <strong>Delaying the restart</strong> of play</li>
+                                    <li>• <strong>Failing to respect required distance</strong> when play is restarted:
+                                        <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                            <li>◦ Corner kick</li>
+                                            <li>◦ Free kick</li>
+                                            <li>◦ Throw-in</li>
+                                        </ul>
+                                    </li>
+                                    <li>• <strong>Entering, re-entering or deliberately leaving</strong> the field of play without the referee's permission</li>
+                                    <li>• <strong>Persistent unacceptable behaviour:</strong>
+                                        <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                            <li>◦ Repeated warning offences</li>
+                                            <li>◦ Showing a lack of respect</li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="border-l-4 border-red-400 pl-3">
-                                <span class="font-semibold text-red-600">Red Card:</span>
-                                <ul class="mt-1 space-y-1">
-                                    <li>• Serious foul play</li>
-                                    <li>• Violent conduct</li>
-                                    <li>• Denying goal opportunity</li>
-                                    <li>• Offensive language</li>
+                                <span class="font-semibold text-red-600">Red Card (Sending-Off Offences):</span>
+                                <ul class="mt-2 space-y-2">
+                                    <li>• <strong>Serious foul play</strong></li>
+                                    <li>• <strong>Violent conduct</strong></li>
+                                    <li>• <strong>Spitting</strong> at an opponent or any other person</li>
+                                    <li>• <strong>Denying goal-scoring opportunity</strong> by an offence punishable by a free kick or penalty kick:
+                                        <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                            <li>◦ Including deliberate handball</li>
+                                        </ul>
+                                    </li>
+                                    <li>• <strong>Using offensive, insulting or abusive language</strong> and/or gestures</li>
+                                    <li>• <strong>Receiving a second yellow card</strong> in the same match</li>
                                 </ul>
                             </div>
                         </div>
@@ -198,18 +233,29 @@
                         </div>
                     </div>
                     <div class="card-content">
-                        <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-                            <div class="font-semibold text-green-600">Offside Position:</div>
+                        <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+                            <div class="font-semibold text-green-600">Offside Position (not an offense by itself):</div>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">A player is in an offside position if:</p>
                             <ul class="space-y-1">
-                                <li>• Closer to goal than ball</li>
-                                <li>• Closer to goal than 2nd last opponent</li>
-                                <li>• In opponent's half</li>
+                                <li>• They are nearer to the opponent's goal line than both the ball and the second-last opponent</li>
+                                <li>• They are in the opponent's half of the field</li>
                             </ul>
-                            <div class="font-semibold text-green-600 mt-3">Involved in Play:</div>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">➡️ A player is not offside if they are level with the second-last opponent or the ball.</p>
+                            
+                            <div class="font-semibold text-green-600 mt-4">Offside Offense (becomes an offense only if involved in active play):</div>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">A player in an offside position is penalized only if, at the moment the ball is played or touched by a teammate, they become involved in active play by:</p>
                             <ul class="space-y-1">
-                                <li>• Interfering with play</li>
-                                <li>• Interfering with opponent</li>
-                                <li>• Gaining advantage</li>
+                                <li>• Interfering with play (playing or touching the ball passed or touched by a teammate), or</li>
+                                <li>• Interfering with an opponent (preventing them from playing or being able to play the ball — e.g., obstructing their line of vision or challenging them for the ball), or</li>
+                                <li>• Gaining an advantage (playing a ball that rebounds or is deflected to them off the goalpost, crossbar, match official, or an opponent having been in an offside position)</li>
+                            </ul>
+                            
+                            <div class="font-semibold text-green-600 mt-4">No Offside Offense When:</div>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">The player receives the ball directly from:</p>
+                            <ul class="space-y-1">
+                                <li>• A goal kick</li>
+                                <li>• A throw-in</li>
+                                <li>• A corner kick</li>
                             </ul>
                         </div>
                     </div>
@@ -227,19 +273,21 @@
                         </div>
                     </div>
                     <div class="card-content">
-                        <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                        <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
                             <div class="font-semibold text-red-600">Handball Offense:</div>
                             <ul class="space-y-1">
                                 <li>• Deliberate hand/arm contact</li>
                                 <li>• Hand/arm above shoulder</li>
                                 <li>• Hand/arm makes body bigger</li>
                                 <li>• Hand/arm in unnatural position</li>
+                                <li>• <strong>The goal scored/created with the hand of an attacker (always offense, even if accidental)</strong></li>
                             </ul>
-                            <div class="font-semibold text-green-600 mt-3">Not Handball:</div>
+                            <div class="font-semibold text-green-600 mt-4">Not Handball:</div>
                             <ul class="space-y-1">
                                 <li>• Ball hits hand/arm directly</li>
                                 <li>• Hand/arm close to body</li>
                                 <li>• Supporting body in fall</li>
+                                <li>• <strong>The deflection clarification (not offense if it comes from close range or own body quickly)</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -288,15 +336,55 @@
                         </div>
                     </div>
                     <div class="card-content">
-                        <div class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                        <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
                             <div class="font-semibold text-cyan-600">Common Signals:</div>
-                            <ul class="space-y-1">
-                                <li>• Direct free kick: Point forward</li>
-                                <li>• Indirect free kick: Arm raised</li>
-                                <li>• Goal: Point to center</li>
-                                <li>• Corner kick: Point to corner</li>
-                                <li>• Goal kick: Point to 6-yard box</li>
-                                <li>• Advantage: Both arms forward</li>
+                            <ul class="space-y-3">
+                                <li>• <strong>Direct Free Kick:</strong>
+                                    <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                        <li>→ Referee points straight in the direction of the kick</li>
+                                        <li>(Signal is held briefly; no arm raised)</li>
+                                    </ul>
+                                </li>
+                                <li>• <strong>Indirect Free Kick:</strong>
+                                    <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                        <li>→ Referee raises one arm straight up</li>
+                                        <li>(Arm remains raised until the ball is touched by another player or goes out of play)</li>
+                                    </ul>
+                                </li>
+                                <li>• <strong>Goal:</strong>
+                                    <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                        <li>→ Referee points with one arm toward the center circle</li>
+                                    </ul>
+                                </li>
+                                <li>• <strong>Corner Kick:</strong>
+                                    <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                        <li>→ Referee points with one arm toward the corner flag on the attacking side</li>
+                                    </ul>
+                                </li>
+                                <li>• <strong>Goal Kick:</strong>
+                                    <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                        <li>→ Referee points toward the goal area (6-yard box) with an open hand</li>
+                                    </ul>
+                                </li>
+                                <li>• <strong>Advantage:</strong>
+                                    <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                        <li>→ Referee extends both arms forward and calls "Play on!" or "Advantage!"</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            
+                            <div class="font-semibold text-cyan-600 mt-4">Other Useful Signals:</div>
+                            <ul class="space-y-3">
+                                <li>• <strong>Penalty Kick:</strong>
+                                    <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                        <li>→ Referee points directly to the penalty mark</li>
+                                    </ul>
+                                </li>
+                                <li>• <strong>Throw-In:</strong>
+                                    <ul class="ml-4 mt-1 space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                        <li>→ Referee points in the direction of attack along the touchline</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -329,16 +417,11 @@
             const content = card.querySelector('.card-content');
             const isExpanded = content.classList.contains('expanded');
             
-            // Close all other cards
-            document.querySelectorAll('.card-content').forEach(c => {
-                c.classList.remove('expanded');
-            });
-            document.querySelectorAll('.reference-card').forEach(c => {
-                c.classList.remove('card-expanded');
-            });
-            
             // Toggle current card
-            if (!isExpanded) {
+            if (isExpanded) {
+                content.classList.remove('expanded');
+                card.classList.remove('card-expanded');
+            } else {
                 content.classList.add('expanded');
                 card.classList.add('card-expanded');
             }

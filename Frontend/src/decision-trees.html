@@ -10,6 +10,10 @@
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+        
+        body.dark .gradient-bg {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
         .glass {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -50,56 +54,95 @@
             border-right: 10px solid transparent;
             border-top: 15px solid rgba(255, 255, 255, 0.3);
         }
+        
+        /* Animation classes */
+        .header-collapsed {
+            height: 0;
+            padding: 0;
+            margin: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .content-expanded {
+            margin-top: -20px;
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .tree-section {
+            transition: all 0.5s ease-in-out;
+        }
+        
+        /* Ensure no scrolling */
+        body {
+            overflow: hidden;
+        }
+        
+        .main-content {
+            height: calc(100vh - 80px); /* Account for navbar height */
+            overflow: hidden;
+        }
     </style>
 </head>
-<body class="min-h-screen gradient-bg dark:bg-gray-900 transition-colors duration-300">
+<body class="min-h-screen gradient-bg dark:bg-gray-900 transition-colors duration-300 dark flex flex-col">
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 z-50 dark:bg-gray-900/90 dark:border-gray-700">
-        <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-futbol text-white text-lg"></i>
+    <nav class="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200 z-50 dark:bg-gray-900/95 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo Section -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-futbol text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">PlayCheck AI</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Football Rules Assistant</p>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">PlayCheck AI</h1>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Football Rules Assistant</p>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
+                    <a href="index.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="reference-tools.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-tools mr-2"></i>Tools
+                    </a>
+                    <a href="scenarios-simple.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-graduation-cap mr-2"></i>Training
+                    </a>
+                    <a href="decision-trees.html" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                        <i class="fas fa-sitemap mr-2"></i>Trees
+                    </a>
                 </div>
-            </div>
-            <div class="flex items-center space-x-3">
-                <button id="darkModeToggle" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <a href="reference-tools.html" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-tools mr-2"></i>Tools
-                </a>
-                <a href="scenarios-simple.html" class="bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-graduation-cap mr-2"></i>Training
-                </a>
-                <a href="decision-trees.html" class="bg-purple-100 hover:bg-purple-200 dark:bg-purple-900 dark:hover:bg-purple-800 text-purple-700 dark:text-purple-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-sitemap mr-2"></i>Trees
-                </a>
-                <a href="chat.html" class="bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-comments mr-2"></i>Chat
-                </a>
-                <a href="index.html" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i class="fas fa-home mr-2"></i>Home
-                </a>
+                
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="max-w-6xl mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-white mb-4">Interactive Decision Trees</h1>
-            <p class="text-white/80 text-lg">Step-by-step decision making for complex referee scenarios</p>
-        </div>
+    <div class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full main-content">
+        <!-- Hero Section -->
+        <section id="heroSection" class="pt-20 pb-6 px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-center border border-white/20">
+                    <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-sitemap text-white text-xl"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold text-white mb-2">Decision Trees</h1>
+                    <p class="text-white/80 max-w-2xl mx-auto">Step-by-step decision making for complex referee scenarios</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Content Section -->
+        <div class="max-w-6xl mx-auto">
 
         <!-- Tree Selection -->
-        <div class="glass rounded-2xl p-6 mb-8">
-            <h2 class="text-2xl font-semibold text-white mb-6">Choose a Decision Tree</h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="glass rounded-2xl p-4 mb-6">
+            <h2 class="text-xl font-semibold text-white mb-4">Choose a Decision Tree</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
                 <button class="tree-selector bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300" data-tree="foul">
                     <i class="fas fa-running text-2xl mb-2"></i>
                     <h3 class="font-semibold">Foul Decision</h3>
@@ -134,7 +177,7 @@
         </div>
 
         <!-- Decision Tree Display -->
-        <div id="treeContainer" class="hidden">
+        <div id="treeContainer" class="hidden tree-section">
             <!-- Tree Header -->
             <div class="glass rounded-2xl p-6 mb-6">
                 <div class="flex justify-between items-center">
@@ -179,22 +222,6 @@
     </div>
 
     <script>
-        // Dark mode functionality
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const body = document.body;
-        
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        if (currentTheme === 'dark') {
-            body.classList.add('dark');
-            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-        
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark');
-            const isDark = body.classList.contains('dark');
-            darkModeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
 
         // Decision tree data
         const decisionTrees = {
@@ -208,7 +235,7 @@
                         text: "Was there contact between the players?",
                         options: [
                             { text: "Yes, there was contact", next: "contact_type" },
-                            { text: "No, no contact made", next: "no_foul" }
+                            { text: "No contact made", next: "non_contact" }
                         ]
                     },
                     {
@@ -232,6 +259,28 @@
                             { text: "Yes, deliberate trip", next: "direct_foul" },
                             { text: "No, accidental trip", next: "accidental_trip" }
                         ]
+                    },
+                    {
+                        id: "non_contact",
+                        type: "question",
+                        text: "If no contact, did any of the following occur?",
+                        options: [
+                            { text: "Impeding the progress of an opponent (without contact)", next: "impeding_ifk" },
+                            { text: "Dangerous play (e.g., high kick)", next: "dangerous_play_ifk" },
+                            { text: "Neither", next: "no_foul" }
+                        ]
+                    },
+                    {
+                        id: "impeding_ifk",
+                        type: "result",
+                        text: "Indirect Free Kick",
+                        explanation: "Impeding the progress of an opponent without contact is an indirect free kick offense under Law 12."
+                    },
+                    {
+                        id: "dangerous_play_ifk",
+                        type: "result",
+                        text: "Indirect Free Kick",
+                        explanation: "Playing in a dangerous manner (e.g., high kick causing an opponent to pull out of a challenge) is an indirect free kick offense under Law 12."
                     },
                     {
                         id: "push_foul",
@@ -293,8 +342,7 @@
                         text: "Was a foul committed?",
                         options: [
                             { text: "Yes, a foul occurred", next: "foul_severity" },
-                            { text: "No, but unsporting behavior", next: "unsporting" },
-                            { text: "No foul, no misconduct", next: "no_card" }
+                            { text: "No, but misconduct", next: "unsporting" }
                         ]
                     },
                     {
@@ -302,9 +350,9 @@
                         type: "question",
                         text: "How severe was the foul?",
                         options: [
-                            { text: "Careless (normal challenge)", next: "no_card" },
-                            { text: "Reckless (endangers opponent)", next: "yellow_card" },
-                            { text: "Excessive force/violence", next: "red_card" }
+                            { text: "Careless (Lack of attention or precaution)", next: "no_card" },
+                            { text: "Reckless (Disregard for danger or consequences)", next: "yellow_card" },
+                            { text: "Excessive force (Endangers safety of opponent)", next: "red_card" }
                         ]
                     },
                     {
@@ -313,9 +361,10 @@
                         text: "What type of unsporting behavior?",
                         options: [
                             { text: "Dissent, simulation, delaying restart", next: "yellow_card" },
-                            { text: "Serious foul play", next: "red_card" },
+                            { text: "Other cautionable offences", next: "yellow_card" },
                             { text: "Violent conduct", next: "red_card" },
-                            { text: "Offensive language/gestures", next: "red_card" }
+                            { text: "Offensive language/gestures", next: "red_card" },
+                            { text: "Other sending-off offences", next: "red_card" }
                         ]
                     },
                     {
@@ -354,35 +403,35 @@
                     {
                         id: "check_position",
                         type: "question",
-                        text: "Is the player closer to the goal line than the ball?",
+                        text: "Is the player nearer to the goal line than BOTH the ball AND the second-last opponent?",
                         options: [
-                            { text: "Yes, closer than ball", next: "check_second_last" },
-                            { text: "No, behind or level with ball", next: "not_offside" }
-                        ]
-                    },
-                    {
-                        id: "check_second_last",
-                        type: "question",
-                        text: "Is the player closer to the goal line than the second-last opponent?",
-                        options: [
-                            { text: "Yes, closer than second-last opponent", next: "check_involvement" },
-                            { text: "No, behind or level with second-last opponent", next: "not_offside" }
+                            { text: "Yes, nearer than both ball and second-last opponent", next: "check_involvement" },
+                            { text: "No, behind or level with ball or second-last opponent", next: "not_offside" }
                         ]
                     },
                     {
                         id: "check_involvement",
                         type: "question",
-                        text: "Does the player become involved in active play?",
+                        text: "Does the player become involved in active play (interfering with play/opponent, or gaining advantage)?",
                         options: [
-                            { text: "Yes, touches ball or interferes", next: "offside" },
-                            { text: "No, not involved in play", next: "not_offside" }
+                            { text: "Yes, involved in active play", next: "check_exceptions" },
+                            { text: "Not involved in play", next: "not_offside" }
+                        ]
+                    },
+                    {
+                        id: "check_exceptions",
+                        type: "question",
+                        text: "Did the player receive the ball directly from a goal kick, throw-in, or corner kick?",
+                        options: [
+                            { text: "Yes, from goal kick/throw-in/corner kick", next: "not_offside" },
+                            { text: "No, from other source", next: "offside" }
                         ]
                     },
                     {
                         id: "offside",
                         type: "result",
                         text: "Offside - Indirect Free Kick",
-                        explanation: "Player was in an offside position and became involved in active play. Award indirect free kick to defending team."
+                        explanation: "Player was in an offside position (nearer to goal line than both ball and second-last opponent) and became involved in active play. Award indirect free kick to defending team from where the offside offense occurred."
                     },
                     {
                         id: "not_offside",
@@ -411,7 +460,16 @@
                         text: "Was the hand/arm movement deliberate?",
                         options: [
                             { text: "Yes, deliberate movement", next: "deliberate_handball" },
-                            { text: "No, accidental contact", next: "check_position" }
+                            { text: "No, accidental contact", next: "check_goal_handball" }
+                        ]
+                    },
+                    {
+                        id: "check_goal_handball",
+                        type: "question",
+                        text: "Was a goal scored or created with the hand/arm?",
+                        options: [
+                            { text: "Yes, goal scored/created with hand/arm", next: "deliberate_handball" },
+                            { text: "No goal involved", next: "check_position" }
                         ]
                     },
                     {
@@ -429,14 +487,14 @@
                         text: "Did the player gain an advantage?",
                         options: [
                             { text: "Yes, gained advantage", next: "handball" },
-                            { text: "No, no advantage gained", next: "no_handball" }
+                            { text: "No advantage gained", next: "no_handball" }
                         ]
                     },
                     {
                         id: "deliberate_handball",
                         type: "result",
                         text: "Handball - Direct Free Kick",
-                        explanation: "Deliberate handball is a direct free kick offense. Consider disciplinary action if preventing goal or goal-scoring opportunity."
+                        explanation: "Deliberate handball or goal scored/created with hand/arm is a direct free kick offense (even if accidental for goal). Consider disciplinary action (yellow/red card) if preventing goal or goal-scoring opportunity."
                     },
                     {
                         id: "handball",
@@ -547,7 +605,7 @@
                         text: "Was a foul committed?",
                         options: [
                             { text: "Yes, a foul occurred", next: "check_advantage" },
-                            { text: "No, no foul", next: "play_on" }
+                            { text: "No foul", next: "play_on" }
                         ]
                     },
                     {
@@ -565,14 +623,14 @@
                         text: "Is the fouled team in a promising position?",
                         options: [
                             { text: "Yes, good attacking position", next: "play_advantage" },
-                            { text: "No, not in good position", next: "stop_play" }
+                            { text: "Not in good position", next: "stop_play" }
                         ]
                     },
                     {
                         id: "play_advantage",
                         type: "result",
                         text: "Play Advantage",
-                        explanation: "Fouled team has possession and is in a promising position. Play advantage and signal with both arms. If advantage doesn't materialize within 2-3 seconds, stop play and award the free kick."
+                        explanation: "Fouled team has possession and is in a promising position. Play advantage and signal with both arms. If advantage doesn't materialize within a few seconds, stop play and award the free kick."
                     },
                     {
                         id: "stop_play",
@@ -594,6 +652,7 @@
         let currentTree = null;
         let currentNodeId = "start";
         let visitedNodes = new Set();
+        let nodeHistory = []; // Track navigation history
 
         // DOM elements
         const treeSelectors = document.querySelectorAll('.tree-selector');
@@ -619,14 +678,27 @@
             currentTree = decisionTrees[treeType];
             currentNodeId = "start";
             visitedNodes.clear();
+            nodeHistory = ["start"]; // Initialize with start node
             
             treeTitle.textContent = currentTree.title;
             treeDescription.textContent = currentTree.description;
             
+            // Animate header collapse and content expansion
+            const heroSection = document.getElementById('heroSection');
+            const mainContent = document.querySelector('.main-content');
+            
+            // Collapse header
+            heroSection.classList.add('header-collapsed');
+            
+            // Immediately hide selection and show tree
             document.querySelector('.glass').style.display = 'none';
             treeContainer.classList.remove('hidden');
             finalDecision.classList.add('hidden');
             
+            // Expand content to fill space
+            mainContent.classList.add('content-expanded');
+            
+            // Render tree
             renderTree();
         }
 
@@ -657,20 +729,20 @@
 
             if (node.type === 'question') {
                 nodeDiv.innerHTML = `
-                    <div class="glass rounded-2xl p-6">
+                    <div class="glass rounded-2xl p-5">
                         <div class="flex items-center mb-4">
                             <div class="bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">
                                 <i class="fas fa-question"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-white">Question</h3>
+                            <h3 class="text-lg font-semibold text-white">Question</h3>
                         </div>
-                        <p class="text-white/90 text-lg mb-6">${node.text}</p>
-                        <div class="space-y-3">
+                        <p class="text-white/90 text-base mb-4">${node.text}</p>
+                        <div class="space-y-2 max-h-56 overflow-y-auto pr-1">
                             ${node.options.map((option, index) => `
-                                <button class="option-btn w-full p-4 text-left rounded-lg border-2 border-white/20 text-white hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-300" 
+                                <button class="option-btn w-full p-3 text-left rounded-lg border-2 border-white/20 text-white hover:border-blue-400 hover:bg-blue-500/20 transition-all duration-300" 
                                         data-next="${option.next}">
                                     <span class="font-semibold mr-3">${String.fromCharCode(65 + index)})</span>
-                                    <span>${option.text}</span>
+                                    <span class="text-sm">${option.text}</span>
                                 </button>
                             `).join('')}
                         </div>
@@ -691,19 +763,13 @@
                         </div>
                     </div>
                 `;
-                
-                // Show final decision section
-                setTimeout(() => {
-                    finalDecision.classList.remove('hidden');
-                    document.getElementById('decisionResult').textContent = node.text;
-                    document.getElementById('decisionExplanation').textContent = node.explanation;
-                }, 500);
             }
 
             // Add event listeners for options
             nodeDiv.querySelectorAll('.option-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const nextNodeId = btn.dataset.next;
+                    nodeHistory.push(currentNodeId); // Add current node to history
                     currentNodeId = nextNodeId;
                     renderTree();
                 });
@@ -718,26 +784,47 @@
             // For now, we'll just add visual flow with CSS
         }
 
-        // Reset tree
+        // Reset tree - go back to tree selection
         resetTree.addEventListener('click', () => {
-            if (currentTree) {
-                currentNodeId = "start";
-                visitedNodes.clear();
+            const heroSection = document.getElementById('heroSection');
+            const mainContent = document.querySelector('.main-content');
+            
+            // Reset content expansion
+            mainContent.classList.remove('content-expanded');
+            
+            // Hide tree and show selection
+            treeContainer.classList.add('hidden');
+            document.querySelector('.glass').style.display = 'block';
+            
+            // Expand header back
+            heroSection.classList.remove('header-collapsed');
+        });
+
+        // Back button - go to previous question
+        backToSelection.addEventListener('click', () => {
+            if (nodeHistory.length > 0) {
+                currentNodeId = nodeHistory.pop(); // Go back to previous node
                 finalDecision.classList.add('hidden');
                 renderTree();
             }
         });
 
-        // Back to selection
-        backToSelection.addEventListener('click', () => {
+        // Try again - go back to tree selection
+        tryAgain.addEventListener('click', () => {
+            const heroSection = document.getElementById('heroSection');
+            const mainContent = document.querySelector('.main-content');
+            
+            // Reset content expansion
+            mainContent.classList.remove('content-expanded');
+            
+            // Hide tree and show selection
             treeContainer.classList.add('hidden');
             document.querySelector('.glass').style.display = 'block';
-        });
-
-        // Try again
-        tryAgain.addEventListener('click', () => {
-            backToSelection.click();
+            
+            // Expand header back
+            heroSection.classList.remove('header-collapsed');
         });
     </script>
+    
 </body>
 </html>
