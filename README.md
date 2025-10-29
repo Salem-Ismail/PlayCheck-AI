@@ -10,10 +10,21 @@ An AI-powered football rules assistant that helps referees, players, and fans un
 - Modern Chat Interface: Clean, responsive design
 - Real-time Responses: Instant rule clarification and analysis
 
-## Quick Start
+## Live App
+
+- Backend + Frontend (served by Flask): `https://playcheck-ai.onrender.com/`
+- Key routes:
+  - `/` → Home
+  - `/chat` → Chat interface
+  - `/trees` → Decision Trees
+  - `/training` → Training (Coming Soon)
+  - `/tools` → Reference Tools
+  - `/quick-reference` → Quick Reference Cards
+
+## Quick Start (Local)
 
 ### Prerequisites
-- Python 3.8+
+- Python 3.10 (recommended)
 - OpenAI API key
 
 ### Installation
@@ -41,13 +52,28 @@ An AI-powered football rules assistant that helps referees, players, and fans un
 
 4. Start the backend
    ```bash
+   # from Backend/
    python app.py
    ```
 
-5. Open the frontend
-   - Navigate to `Frontend/src/chat.html`
-   - Open in your web browser
-   - Start asking questions!
+5. Open the app locally
+   - Visit `http://127.0.0.1:5000/` for Home
+   - Chat at `http://127.0.0.1:5000/chat`
+   - Other pages: `/trees`, `/training`, `/tools`, `/quick-reference`
+
+## Deployment (Render)
+
+1. Create a new Web Service on Render and point it to this repo
+2. Build command: `pip install -r Backend/requirements.txt`
+3. Start command: `cd Backend && gunicorn app:app --workers 2 --timeout 120`
+4. Environment Variables:
+   - `OPENAI_API_KEY` = your OpenAI key
+   - `FLASK_DEBUG` = False
+   - `PYTHON_VERSION` = 3.10.12
+
+Notes:
+- The Flask backend serves the static frontend pages directly via clean routes.
+- API endpoints used by the frontend: `/get_rule`, `/health`, `/feedback`.
 
 ## Usage Examples
 
